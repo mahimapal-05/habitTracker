@@ -1,0 +1,74 @@
+// Momentum Prisma Schema
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
+  passwordHash String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  tasks        Task[]
+}
+
+model Task {
+  id              String        @id @default(cuid())
+  userId          String
+  user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name            String
+  description     String?
+  type            String        @default("CHECKBOX") // "CHECKBOX" | "NUMERIC" | "TIME"
+  target          Float?
+  unit            String?       // e.g. "steps", "hours", "pages", "glasses"
+  startDate       String        // "YYYY-MM-DD"
+  endDate         String        // "YYYY-MM-DD"
+  frequency       String        @default("DAILY") // "DAILY" | "WEEKDAYS" | "WEEKENDS"
+  reminderEnabled Boolean       @default(false)
+  reminderTimes   String        @default("[]") // JSON string: ["08:00", "13:00", "20:00"]
+  reminderMessage String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+  records         DailyRecord[]
+  reminders       Reminder[]
+
+  @@index([userId])
+}
+
+model DailyRecord {
+  id                String   @id @default(cuid())
+  taskId            String
+  task              Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  date              String   // "YYYY-MM-DD"
+  actualValue       Float?
+  completed         Boolean  @default(false)
+  manuallyCompleted Boolean  @default(false)
+  isAutoCompleted   Boolean  @default(false)
+  note              String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@unique([taskId, date])
+  @@index([taskId])
+  @@index([date])
+}
+
+model Reminder {
+  id          String   @id @default(cuid())
+  taskId      String
+  task        Task     @relation(fields: [taskId], references: [id], onDelete: Cascade)
+  enabled     Boolean  @default(true)
+  time        String   // "HH:mm" (e.g. "08:00")
+  repeatCount Int      @default(1)
+  message     String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([taskId])
+}
