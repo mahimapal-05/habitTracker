@@ -50,6 +50,36 @@ export async function logDailyRecord(userId: string, input: LogDailyRecordInput)
       manuallyCompleted = true;
       isAutoCompleted = false;
     }
+  } else if (task.type === 'PROGRESS') {
+    // PROGRESS / Milestone / Weight Loss Goal
+    const target = task.target ?? 0;
+    const direction = task.direction || 'DECREASE';
+
+    if (actualValue !== undefined && actualValue !== null) {
+      const isTargetMet =
+        direction === 'DECREASE' ? actualValue <= target : actualValue >= target;
+
+      if (isTargetMet) {
+        completed = true;
+        isAutoCompleted = true;
+        manuallyCompleted = false;
+      } else {
+        isAutoCompleted = false;
+        if (input.manuallyCompleted !== undefined) {
+          manuallyCompleted = input.manuallyCompleted;
+          completed = input.manuallyCompleted;
+        } else if (input.completed !== undefined) {
+          completed = input.completed;
+          manuallyCompleted = input.completed;
+        } else if (!manuallyCompleted) {
+          completed = false;
+        }
+      }
+    } else if (input.completed !== undefined) {
+      completed = input.completed;
+      manuallyCompleted = true;
+      isAutoCompleted = false;
+    }
   } else {
     // NUMERIC or TIME Goal
     const target = task.target ?? 0;

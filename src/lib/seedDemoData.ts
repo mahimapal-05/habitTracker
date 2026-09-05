@@ -204,5 +204,50 @@ export async function seedDemoAccount(): Promise<string> {
     });
   }
 
+  // Task 5: Weight Loss Milestone Goal (Progress: 71.70kg -> 65.00kg, Saturday Weigh-ins)
+  const task5Start = format(subDays(todayDate, 28), 'yyyy-MM-dd');
+  const task5End = format(addDays(todayDate, 62), 'yyyy-MM-dd');
+  const task5 = await prisma.task.create({
+    data: {
+      userId,
+      name: 'Weight Loss Journey',
+      description: 'Weekly Saturday morning weigh-in from 71.70kg down to 65.00kg goal weight.',
+      type: 'PROGRESS',
+      startValue: 71.70,
+      target: 65.00,
+      direction: 'DECREASE',
+      unit: 'kg',
+      startDate: task5Start,
+      endDate: task5End,
+      frequency: 'CUSTOM:6', // Saturday weigh-in
+      reminderEnabled: true,
+      reminderTimes: JSON.stringify(['08:30']),
+      reminderMessage: 'Saturday Weigh-in: Step on the scale and log your weight!',
+    },
+  });
+
+  const weighIns = [
+    { daysAgo: 28, val: 71.70, note: 'Starting weigh-in - committed to healthy nutrition!' },
+    { daysAgo: 21, val: 71.10, note: '-0.6kg lost. Clean meal prep is paying off.' },
+    { daysAgo: 14, val: 70.40, note: '-0.7kg lost. Running and high protein diet.' },
+    { daysAgo: 7, val: 69.80, note: '-0.6kg lost. Broke below 70kg milestone!' },
+    { daysAgo: 0, val: 69.20, note: '-0.6kg lost this week. Total 2.50kg lost so far!' },
+  ];
+
+  for (const w of weighIns) {
+    const dStr = format(subDays(todayDate, w.daysAgo), 'yyyy-MM-dd');
+    await prisma.dailyRecord.create({
+      data: {
+        taskId: task5.id,
+        date: dStr,
+        actualValue: w.val,
+        completed: false, // In progress until reaches 65kg
+        manuallyCompleted: false,
+        isAutoCompleted: false,
+        note: w.note,
+      },
+    });
+  }
+
   return userId;
 }

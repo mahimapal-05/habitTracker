@@ -14,6 +14,9 @@ import {
   Repeat,
   CalendarDays,
   Flame,
+  TrendingDown,
+  TrendingUp,
+  Scale,
 } from 'lucide-react';
 import {
   getTodayISO,
@@ -32,10 +35,24 @@ interface TaskModalProps {
 
 const GOAL_TEMPLATES = [
   {
+    name: 'Weight Loss Journey (71.7kg → 65kg)',
+    description: 'Weekly Saturday weigh-in to track fat loss and body transformation.',
+    type: 'PROGRESS' as const,
+    startValue: '71.70',
+    target: '65.00',
+    direction: 'DECREASE' as const,
+    unit: 'kg',
+    frequency: 'CUSTOM:6', // Every Saturday
+    durationDays: 120,
+    reminderTimes: ['08:30'],
+  },
+  {
     name: '10,000 Daily Steps',
     description: 'Brisk walking or jogging to maintain active physical health.',
     type: 'NUMERIC' as const,
+    startValue: '0',
     target: '10000',
+    direction: 'INCREASE' as const,
     unit: 'steps',
     frequency: 'DAILY',
     durationDays: 30,
@@ -45,27 +62,33 @@ const GOAL_TEMPLATES = [
     name: 'Gym Strength Training',
     description: 'Weight lifting and resistance workouts.',
     type: 'CHECKBOX' as const,
+    startValue: '0',
     target: '1',
+    direction: 'INCREASE' as const,
     unit: 'session',
     frequency: 'CUSTOM:1,3,5', // Mon, Wed, Fri
     durationDays: 60,
     reminderTimes: ['17:30'],
   },
   {
-    name: 'Drink 2.5L Water',
-    description: 'Stay properly hydrated throughout the day.',
-    type: 'NUMERIC' as const,
-    target: '2500',
-    unit: 'ml',
-    frequency: 'DAILY',
-    durationDays: 30,
-    reminderTimes: ['09:00', '13:00', '17:00'],
+    name: 'Emergency Savings ($1k → $5k)',
+    description: 'Build emergency reserve fund with monthly and weekly deposits.',
+    type: 'PROGRESS' as const,
+    startValue: '1000',
+    target: '5000',
+    direction: 'INCREASE' as const,
+    unit: '$',
+    frequency: 'CUSTOM:5', // Every Friday
+    durationDays: 180,
+    reminderTimes: ['10:00'],
   },
   {
     name: 'Read 30 Minutes',
     description: 'Read non-fiction, philosophy, or literature daily.',
     type: 'TIME' as const,
+    startValue: '0',
     target: '0.5',
+    direction: 'INCREASE' as const,
     unit: 'hours',
     frequency: 'DAILY',
     durationDays: 30,
@@ -75,31 +98,13 @@ const GOAL_TEMPLATES = [
     name: 'Deep Work / Coding',
     description: 'Distraction-free high-focus engineering or creative sprint.',
     type: 'TIME' as const,
+    startValue: '0',
     target: '2',
+    direction: 'INCREASE' as const,
     unit: 'hours',
     frequency: 'WEEKDAYS',
     durationDays: 60,
     reminderTimes: ['09:30'],
-  },
-  {
-    name: 'Deep House Cleaning',
-    description: 'Tidy up rooms and organize workspace periodically.',
-    type: 'CHECKBOX' as const,
-    target: '1',
-    unit: 'session',
-    frequency: 'INTERVAL:3', // Every 3 days
-    durationDays: 45,
-    reminderTimes: ['10:00'],
-  },
-  {
-    name: 'Weekend Reflection & Review',
-    description: 'Review weekly progress, reflect on lessons, and plan next week.',
-    type: 'TIME' as const,
-    target: '1',
-    unit: 'hours',
-    frequency: 'WEEKENDS', // Sat & Sun
-    durationDays: 60,
-    reminderTimes: ['11:00'],
   },
 ];
 
@@ -116,8 +121,10 @@ const WEEK_DAYS = [
 export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalProps) {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [type, setType] = useState<'CHECKBOX' | 'NUMERIC' | 'TIME'>('CHECKBOX');
+  const [type, setType] = useState<'CHECKBOX' | 'NUMERIC' | 'TIME' | 'PROGRESS'>('CHECKBOX');
   const [target, setTarget] = useState<string>('10000');
+  const [startValue, setStartValue] = useState<string>('71.70');
+  const [direction, setDirection] = useState<'DECREASE' | 'INCREASE'>('DECREASE');
   const [unit, setUnit] = useState<string>('steps');
   const [startDate, setStartDate] = useState(getTodayISO());
   const [endDate, setEndDate] = useState(
@@ -142,8 +149,10 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
       setName(editingTask.name || '');
       setDescription(editingTask.description || '');
       setType(editingTask.type || 'CHECKBOX');
-      setTarget(editingTask.target ? String(editingTask.target) : '10000');
-      setUnit(editingTask.unit || (editingTask.type === 'TIME' ? 'hours' : 'steps'));
+      setTarget(editingTask.target !== null && editingTask.target !== undefined ? String(editingTask.target) : '10000');
+      setStartValue(editingTask.startValue !== null && editingTask.startValue !== undefined ? String(editingTask.startValue) : '71.70');
+      setDirection((editingTask.direction as 'DECREASE' | 'INCREASE') || 'DECREASE');
+      setUnit(editingTask.unit || (editingTask.type === 'TIME' ? 'hours' : editingTask.type === 'PROGRESS' ? 'kg' : 'steps'));
       setStartDate(editingTask.startDate || getTodayISO());
       setEndDate(editingTask.endDate || getTodayISO());
 
@@ -162,6 +171,8 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
       setDescription('');
       setType('CHECKBOX');
       setTarget('10000');
+      setStartValue('71.70');
+      setDirection('DECREASE');
       setUnit('steps');
       setStartDate(getTodayISO());
       setEndDate(format(addDays(parseISO(getTodayISO()), 30), 'yyyy-MM-dd'));
@@ -185,6 +196,8 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
     setDescription(tpl.description);
     setType(tpl.type);
     setTarget(tpl.target);
+    setStartValue(tpl.startValue || '71.70');
+    setDirection(tpl.direction || 'DECREASE');
     setUnit(tpl.unit);
 
     const parsed = parseFrequency(tpl.frequency);
@@ -197,10 +210,10 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
     setEndDate(format(addDays(parseISO(getTodayISO()), tpl.durationDays), 'yyyy-MM-dd'));
     setReminderEnabled(true);
     setReminderTimes(tpl.reminderTimes);
-    setReminderMessage(`Time to complete: ${tpl.name}!`);
+    setReminderMessage(`Time to log: ${tpl.name}!`);
   };
 
-  const handleTypeChange = (newType: 'CHECKBOX' | 'NUMERIC' | 'TIME') => {
+  const handleTypeChange = (newType: 'CHECKBOX' | 'NUMERIC' | 'TIME' | 'PROGRESS') => {
     setType(newType);
     if (newType === 'TIME') {
       setTarget('2');
@@ -208,6 +221,14 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
     } else if (newType === 'NUMERIC') {
       setTarget('10000');
       setUnit('steps');
+    } else if (newType === 'PROGRESS') {
+      setStartValue('71.70');
+      setTarget('65.00');
+      setDirection('DECREASE');
+      setUnit('kg');
+      // Default to Saturday weigh-in for weight loss
+      setFreqType('CUSTOM_DAYS');
+      setCustomDays([6]);
     }
   };
 
@@ -273,7 +294,24 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
     if (type !== 'CHECKBOX') {
       const numTarget = parseFloat(target);
       if (isNaN(numTarget) || numTarget <= 0) {
-        setError('Please enter a valid numeric target greater than 0.');
+        setError('Please enter a valid target value greater than 0.');
+        return;
+      }
+    }
+
+    if (type === 'PROGRESS') {
+      const numStart = parseFloat(startValue);
+      const numTarget = parseFloat(target);
+      if (isNaN(numStart) || isNaN(numTarget)) {
+        setError('Please enter valid numbers for starting and target values.');
+        return;
+      }
+      if (direction === 'DECREASE' && numStart <= numTarget) {
+        setError('For a reduction/weight-loss goal, starting value must be greater than target (e.g. from 71.7kg down to 65kg).');
+        return;
+      }
+      if (direction === 'INCREASE' && numStart >= numTarget) {
+        setError('For an increase/gain goal, starting value must be less than target (e.g. from $1,000 up to $5,000).');
         return;
       }
     }
@@ -287,6 +325,8 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
         description: description.trim() || undefined,
         type,
         target: type !== 'CHECKBOX' ? parseFloat(target) : undefined,
+        startValue: type === 'PROGRESS' ? parseFloat(startValue) : undefined,
+        direction: type === 'PROGRESS' ? direction : undefined,
         unit: type !== 'CHECKBOX' ? unit.trim() : undefined,
         startDate,
         endDate,
@@ -339,7 +379,7 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
             <span>{editingTask ? 'Edit Goal & Habit' : 'Create New Goal / Habit'}</span>
           </h2>
           <p className="text-xs text-mocha-300">
-            Set custom duration, targets, frequencies, and scheduled reminders.
+            Set custom duration, targets, frequencies, milestones, and scheduled reminders.
           </p>
         </div>
 
@@ -366,7 +406,7 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
         )}
 
         {error && (
-          <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs">
+          <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 text-xs font-semibold">
             {error}
           </div>
         )}
@@ -381,7 +421,7 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
               <input
                 type="text"
                 required
-                placeholder="e.g. 10,000 Steps, Gym Workout, Read 30 Mins"
+                placeholder="e.g. Weight Loss, 10,000 Steps, Gym Workout, Read 30 Mins"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-mocha-400 focus:outline-none focus:border-caramel-500 text-sm transition"
@@ -402,12 +442,12 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
             </div>
           </div>
 
-          {/* Section 2: Habit Type & Target Values */}
+          {/* Section 2: Metric Types (Checkbox, Numeric, Time, Progress Milestone) */}
           <div className="space-y-3 pt-2 border-t border-white/10">
             <label className="block text-xs font-bold text-mocha-200">
               Tracking Metric Type
             </label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               <button
                 type="button"
                 onClick={() => handleTypeChange('CHECKBOX')}
@@ -430,8 +470,8 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
                     : 'border-white/10 bg-white/5 hover:border-white/20'
                 }`}
               >
-                <span className="block text-xs font-bold text-white"># Numeric Target</span>
-                <span className="block text-[10px] text-mocha-300">Steps, ml, pages...</span>
+                <span className="block text-xs font-bold text-white"># Numeric</span>
+                <span className="block text-[10px] text-mocha-300">Daily fixed target</span>
               </button>
 
               <button
@@ -443,12 +483,26 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
                     : 'border-white/10 bg-white/5 hover:border-white/20'
                 }`}
               >
-                <span className="block text-xs font-bold text-white">⏱️ Duration / Time</span>
-                <span className="block text-[10px] text-mocha-300">Hours or minutes</span>
+                <span className="block text-xs font-bold text-white">⏱️ Duration</span>
+                <span className="block text-[10px] text-mocha-300">Hours / minutes</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleTypeChange('PROGRESS')}
+                className={`p-3 rounded-xl border text-left space-y-1 transition-all ${
+                  type === 'PROGRESS'
+                    ? 'border-caramel-500 bg-caramel-500/15 shadow-sm'
+                    : 'border-white/10 bg-white/5 hover:border-white/20'
+                }`}
+              >
+                <span className="block text-xs font-bold text-white">📉 Milestone</span>
+                <span className="block text-[10px] text-mocha-300">Weight loss, delta</span>
               </button>
             </div>
 
-            {type !== 'CHECKBOX' && (
+            {/* Standard Numeric / Time Target Inputs */}
+            {(type === 'NUMERIC' || type === 'TIME') && (
               <div className="grid grid-cols-2 gap-3 p-3.5 rounded-xl bg-white/5 border border-white/5">
                 <div>
                   <label className="block text-[11px] font-bold text-mocha-200 mb-1">
@@ -476,6 +530,106 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
                     className="w-full px-3 py-2 rounded-lg bg-espresso-950 border border-white/10 text-white text-sm focus:outline-none focus:border-caramel-500"
                   />
                 </div>
+              </div>
+            )}
+
+            {/* Progress / Weight Loss / Milestone Inputs */}
+            {type === 'PROGRESS' && (
+              <div className="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-4 animate-fade-in">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-bold text-white flex items-center gap-1.5">
+                    <Scale className="w-4 h-4 text-caramel-400" />
+                    <span>Progression & Milestone Configuration</span>
+                  </span>
+                  <div className="flex items-center gap-1 bg-espresso-950 p-1 rounded-xl border border-white/10">
+                    <button
+                      type="button"
+                      onClick={() => setDirection('DECREASE')}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1 transition ${
+                        direction === 'DECREASE'
+                          ? 'bg-rose-600 text-white shadow-sm'
+                          : 'text-mocha-300 hover:text-white'
+                      }`}
+                    >
+                      <TrendingDown className="w-3.5 h-3.5" />
+                      <span>Lose / Decrease</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setDirection('INCREASE')}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-bold flex items-center gap-1 transition ${
+                        direction === 'INCREASE'
+                          ? 'bg-emerald-600 text-white shadow-sm'
+                          : 'text-mocha-300 hover:text-white'
+                      }`}
+                    >
+                      <TrendingUp className="w-3.5 h-3.5" />
+                      <span>Gain / Increase</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-3">
+                  <div>
+                    <label className="block text-[11px] font-bold text-mocha-200 mb-1">
+                      Starting Value *
+                    </label>
+                    <input
+                      type="number"
+                      step="any"
+                      required
+                      placeholder="e.g. 71.70"
+                      value={startValue}
+                      onChange={(e) => setStartValue(e.target.value)}
+                      className="w-full px-3 py-2 rounded-lg bg-espresso-950 border border-white/10 text-white text-sm font-mono focus:outline-none focus:border-caramel-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-mocha-200 mb-1">
+                      Goal Target *
+                    </label>
+                    <input
+                      type="number"
+                      step="any"
+                      required
+                      placeholder="e.g. 65.00"
+                      value={target}
+                      onChange={(e) => setTarget(e.target.value)}
+                      className="w-full px-3 py-2 rounded-lg bg-espresso-950 border border-white/10 text-white text-sm font-mono focus:outline-none focus:border-caramel-500"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-mocha-200 mb-1">
+                      Unit
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="kg, lbs, $"
+                      value={unit}
+                      onChange={(e) => setUnit(e.target.value)}
+                      className="w-full px-3 py-2 rounded-lg bg-espresso-950 border border-white/10 text-white text-sm focus:outline-none focus:border-caramel-500"
+                    />
+                  </div>
+                </div>
+
+                {/* Live Journey Summary */}
+                {parseFloat(startValue) > 0 && parseFloat(target) > 0 && (
+                  <div className="p-3 rounded-xl bg-caramel-500/10 border border-caramel-500/20 text-xs text-caramel-300 flex items-center justify-between">
+                    <div>
+                      <span className="font-bold">Journey Plan: </span>
+                      <span>
+                        {direction === 'DECREASE' ? 'Reduce' : 'Increase'} from{' '}
+                        <strong className="text-white font-mono">{startValue} {unit}</strong> to{' '}
+                        <strong className="text-white font-mono">{target} {unit}</strong>
+                      </span>
+                    </div>
+                    <span className="font-extrabold font-mono text-white bg-caramel-600/30 px-2 py-0.5 rounded">
+                      Δ {Math.abs(parseFloat(startValue) - parseFloat(target)).toFixed(2)} {unit}
+                    </span>
+                  </div>
+                )}
               </div>
             )}
           </div>
@@ -516,7 +670,7 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
               <div className="flex items-center justify-between">
                 <label className="block text-xs font-bold text-mocha-200 flex items-center gap-1.5">
                   <Repeat className="w-3.5 h-3.5 text-caramel-400" />
-                  <span>Custom Frequency Tracking</span>
+                  <span>Weigh-in / Tracking Frequency</span>
                 </label>
                 <span className="text-[11px] font-bold text-caramel-300 bg-caramel-500/15 px-2 py-0.5 rounded-md border border-caramel-500/25">
                   {currentFormattedLabel}
@@ -602,17 +756,17 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
                     <div className="flex items-center gap-1">
                       <button
                         type="button"
+                        onClick={() => setCustomDays([6])}
+                        className="px-2 py-0.5 rounded text-[10px] font-semibold bg-caramel-500/20 text-caramel-300 hover:bg-caramel-500/30 transition"
+                      >
+                        Saturdays Only
+                      </button>
+                      <button
+                        type="button"
                         onClick={() => setCustomDays([1, 3, 5])}
                         className="px-2 py-0.5 rounded text-[10px] font-semibold bg-white/5 hover:bg-white/10 text-mocha-200 transition"
                       >
                         MWF
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => setCustomDays([2, 4, 6])}
-                        className="px-2 py-0.5 rounded text-[10px] font-semibold bg-white/5 hover:bg-white/10 text-mocha-200 transition"
-                      >
-                        TTS
                       </button>
                       <button
                         type="button"

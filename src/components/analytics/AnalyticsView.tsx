@@ -279,7 +279,11 @@ export function AnalyticsView() {
                         stroke="#968172"
                         fontSize={11}
                         tickLine={false}
-                        domain={[0, 'auto']}
+                        domain={
+                          selectedTask.type === 'PROGRESS'
+                            ? ['dataMin - 1', 'dataMax + 1']
+                            : [0, 'auto']
+                        }
                       />
                       <Tooltip
                         content={({ active, payload, label }) => {

@@ -73,7 +73,30 @@ export function generateTaskMotivation(ctx: MotivationContext): MotivationResult
     };
   }
 
-  // 2. Numeric / Time Goals Performance Evaluation
+  // 2. Progress / Milestone Goals (e.g. Weight Loss from 71.7kg to 65kg)
+  if (taskType === 'PROGRESS' && target != null) {
+    if (todayActual != null) {
+      if (todayCompleted) {
+        return {
+          title: 'Goal Milestone Achieved! 🎉',
+          message: `🏆 Outstanding achievement! You reached your goal target of ${formatNum(target)}${unitStr} on "${taskName}"! Celebrate this monumental win!`,
+          type: 'target_hit',
+          tag: 'Goal Achieved',
+          accent: 'emerald',
+        };
+      }
+
+      return {
+        title: 'Check-in Recorded!',
+        message: `📉 Weigh-in logged at ${formatNum(todayActual)}${unitStr}. Consistent check-ins keep you focused on reaching your ${formatNum(target)}${unitStr} target.`,
+        type: 'encouragement',
+        tag: 'Milestone Check-in',
+        accent: 'amber',
+      };
+    }
+  }
+
+  // 3. Numeric / Time Goals Performance Evaluation
   if ((taskType === 'NUMERIC' || taskType === 'TIME') && target != null) {
     if (todayActual != null) {
       // Check for New Personal Best

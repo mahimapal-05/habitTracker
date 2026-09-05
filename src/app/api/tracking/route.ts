@@ -100,6 +100,8 @@ export async function GET(req: NextRequest) {
           startDate: task.startDate,
           endDate: task.endDate,
           frequency: task.frequency,
+          startValue: task.startValue,
+          direction: task.direction,
         },
         metrics,
         days,

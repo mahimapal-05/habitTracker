@@ -143,10 +143,11 @@ export function DashboardView({
               onChange={(e) => setTypeFilter(e.target.value)}
               className="px-3 py-2 rounded-xl bg-espresso-900/90 border border-white/10 text-mocha-100 text-xs font-semibold focus:outline-none focus:border-caramel-500 transition"
             >
-              <option value="ALL" className="bg-espresso-950 text-white">All Types</option>
+              <option value="ALL" className="bg-espresso-950 text-white">All Metric Types</option>
               <option value="CHECKBOX" className="bg-espresso-950 text-white">Checkboxes</option>
               <option value="NUMERIC" className="bg-espresso-950 text-white">Numeric</option>
               <option value="TIME" className="bg-espresso-950 text-white">Time</option>
+              <option value="PROGRESS" className="bg-espresso-950 text-white">Milestone / Progress</option>
             </select>
           </div>
 

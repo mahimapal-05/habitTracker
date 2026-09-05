@@ -89,6 +89,7 @@ export function TasksManager({ tasks, onRefresh }: TasksManagerProps) {
             <option value="CHECKBOX" className="bg-espresso-950 text-white">Checkboxes</option>
             <option value="NUMERIC" className="bg-espresso-950 text-white">Numeric</option>
             <option value="TIME" className="bg-espresso-950 text-white">Time</option>
+            <option value="PROGRESS" className="bg-espresso-950 text-white">Milestone / Progress</option>
           </select>
 
           <select

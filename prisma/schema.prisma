@@ -24,9 +24,11 @@ model Task {
   user            User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   name            String
   description     String?
-  type            String        @default("CHECKBOX") // "CHECKBOX" | "NUMERIC" | "TIME"
+  type            String        @default("CHECKBOX") // "CHECKBOX" | "NUMERIC" | "TIME" | "PROGRESS"
   target          Float?
-  unit            String?       // e.g. "steps", "hours", "pages", "glasses"
+  startValue      Float?        // e.g. 71.70 for weight loss, or 0 for savings
+  direction       String?       @default("DECREASE") // "DECREASE" (weight loss) | "INCREASE" (savings, muscle)
+  unit            String?       // e.g. "kg", "lbs", "steps", "hours", "$"
   startDate       String        // "YYYY-MM-DD"
   endDate         String        // "YYYY-MM-DD"
   frequency       String        @default("DAILY") // "DAILY" | "WEEKDAYS" | "WEEKENDS"

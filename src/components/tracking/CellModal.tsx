@@ -123,32 +123,49 @@ export function CellModal({ isOpen, onClose, cellData, onSaveRecord }: CellModal
           </button>
         </div>
 
-        {/* Actual vs Target for Numeric / Time Goals */}
+        {/* Actual vs Target for Numeric / Time / Progress Goals */}
         {task.type !== 'CHECKBOX' && (
           <div className="space-y-2">
             <div className="flex items-center justify-between text-xs text-mocha-200">
-              <span className="font-semibold">Target: {task.target?.toLocaleString()} {task.unit || ''}</span>
+              <span className="font-semibold">
+                Target:{' '}
+                {task.type === 'PROGRESS'
+                  ? `${task.direction === 'DECREASE' ? '≤ ' : '≥ '}${task.target?.toLocaleString()} ${task.unit || ''} (Start: ${task.startValue} ${task.unit || ''})`
+                  : `${task.target?.toLocaleString()} ${task.unit || ''}`}
+              </span>
               <span className="text-[11px] text-caramel-300">
-                Auto-done when actual ≥ target
+                {task.type === 'PROGRESS'
+                  ? task.direction === 'DECREASE'
+                    ? 'Auto-done when value ≤ target'
+                    : 'Auto-done when value ≥ target'
+                  : 'Auto-done when actual ≥ target'}
               </span>
             </div>
             <div>
               <label className="block text-xs font-bold text-mocha-200 mb-1">
-                Actual Value Logged
+                {task.type === 'PROGRESS' ? `Weigh-in / Current Value (${task.unit || 'value'})` : 'Actual Value Logged'}
               </label>
               <input
                 type="number"
                 step="any"
-                placeholder={`Enter actual ${task.unit || 'value'}`}
+                placeholder={`Enter logged ${task.unit || 'value'}`}
                 value={actualVal}
                 onChange={(e) => {
                   setActualVal(e.target.value);
                   const num = parseFloat(e.target.value);
-                  if (task.target && !isNaN(num) && num >= task.target) {
-                    setIsCompleted(true);
+                  if (task.target && !isNaN(num)) {
+                    if (task.type === 'PROGRESS') {
+                      const isMet =
+                        task.direction === 'DECREASE'
+                          ? num <= task.target
+                          : num >= task.target;
+                      if (isMet) setIsCompleted(true);
+                    } else if (num >= task.target) {
+                      setIsCompleted(true);
+                    }
                   }
                 }}
-                className="w-full px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-caramel-500 transition"
+                className="w-full px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-sm focus:outline-none focus:border-caramel-500 transition font-mono font-bold"
               />
             </div>
           </div>
