@@ -11,7 +11,7 @@ export interface CreateTaskInput {
   unit?: string;
   startDate: string; // YYYY-MM-DD
   endDate: string;   // YYYY-MM-DD
-  frequency?: 'DAILY' | 'WEEKDAYS' | 'WEEKENDS';
+  frequency?: string;
   reminderEnabled?: boolean;
   reminderTimes?: string[]; // e.g. ["08:00", "13:00", "20:00"]
   reminderMessage?: string;

@@ -1,8 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { X, Check, Flame, Calendar, Sparkles, MessageSquare, Target } from 'lucide-react';
-import { formatDisplayDate } from '@/lib/dateUtils';
+import { X, Check, Flame, Calendar, Sparkles, MessageSquare, Target, Repeat } from 'lucide-react';
+import { formatDisplayDate, formatFrequencyLabel } from '@/lib/dateUtils';
 import confetti from 'canvas-confetti';
 
 interface CellModalProps {
@@ -78,6 +78,17 @@ export function CellModal({ isOpen, onClose, cellData, onSaveRecord }: CellModal
               <Calendar className="w-3.5 h-3.5 text-caramel-400" />
               {formatDisplayDate(date)}
             </span>
+            {task.frequency && (
+              <span className="text-[10px] font-semibold text-caramel-300 bg-caramel-500/10 px-2 py-0.5 rounded-full border border-caramel-500/20 flex items-center gap-1">
+                <Repeat className="w-2.5 h-2.5" />
+                <span>{formatFrequencyLabel(task.frequency)}</span>
+              </span>
+            )}
+            {status === 'inactive_freq' && (
+              <span className="text-[10px] font-bold text-amber-300 bg-amber-500/15 px-2 py-0.5 rounded-full border border-amber-500/25">
+                Rest Day (Bonus Entry)
+              </span>
+            )}
           </div>
           <h2 className="text-lg font-black text-white tracking-tight">{task.name}</h2>
         </div>

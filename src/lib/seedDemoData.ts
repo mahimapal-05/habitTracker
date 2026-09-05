@@ -126,20 +126,20 @@ export async function seedDemoAccount(): Promise<string> {
     });
   }
 
-  // Task 3: Deep Study (Time)
+  // Task 3: Deep Study (Time) - Weekdays Only
   const task3Start = format(subDays(todayDate, 14), 'yyyy-MM-dd');
   const task3End = format(addDays(todayDate, 16), 'yyyy-MM-dd');
   const task3 = await prisma.task.create({
     data: {
       userId,
       name: 'Deep Study & Coding',
-      description: 'Dedicated focus session without distractions.',
+      description: 'Dedicated focus sprint without distractions on work days.',
       type: 'TIME',
       target: 2.0,
       unit: 'hours',
       startDate: task3Start,
       endDate: task3End,
-      frequency: 'DAILY',
+      frequency: 'WEEKDAYS',
       reminderEnabled: true,
       reminderTimes: JSON.stringify(['14:00', '20:00']),
       reminderMessage: 'Time for your 2-hour deep study block!',

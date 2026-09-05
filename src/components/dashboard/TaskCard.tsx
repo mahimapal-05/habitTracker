@@ -16,8 +16,10 @@ import {
   ChevronUp,
   Target,
   Zap,
+  Repeat,
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { formatFrequencyLabel, isTaskActiveOnDate, getTodayISO } from '@/lib/dateUtils';
 
 interface TaskCardProps {
   task: any;
@@ -136,6 +138,21 @@ export function TaskCard({ task, onUpdateRecord, onEditTask, onDeleteTask }: Tas
               >
                 {task.type}
               </span>
+
+              {/* Frequency Schedule Pill */}
+              {task.frequency && (
+                <span className="text-[10px] font-semibold text-caramel-300 bg-caramel-500/10 px-2 py-0.5 rounded-full border border-caramel-500/20 flex items-center gap-1">
+                  <Repeat className="w-2.5 h-2.5" />
+                  <span>{formatFrequencyLabel(task.frequency)}</span>
+                </span>
+              )}
+
+              {/* Scheduled / Rest Day status */}
+              {!isTaskActiveOnDate(task, getTodayISO()) && (
+                <span className="text-[10px] font-bold text-mocha-400 bg-white/5 px-2 py-0.5 rounded-full border border-white/10">
+                  Rest Day
+                </span>
+              )}
 
               {/* Status Indicator */}
               {isCompleted && (

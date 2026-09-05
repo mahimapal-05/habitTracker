@@ -5,38 +5,38 @@ import {
   ChevronLeft,
   ChevronRight,
   Calendar,
-  Check,
-  X,
-  Minus,
   Flame,
+  CheckCircle2,
+  AlertCircle,
+  HelpCircle,
   Sparkles,
-  TrendingUp,
-  Award,
+  Repeat,
 } from 'lucide-react';
+import {
+  formatDisplayDate,
+  getTodayISO,
+  formatFrequencyLabel,
+} from '@/lib/dateUtils';
 import { CellModal } from './CellModal';
-import { getTodayISO, formatDisplayDate } from '@/lib/dateUtils';
 
 export function TrackingGrid() {
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+  const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1);
   const [gridData, setGridData] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const [selectedCell, setSelectedCell] = useState<any | null>(null);
 
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth() + 1;
-
-  const monthNames = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
+  const todayStr = getTodayISO();
 
   const fetchGrid = async () => {
     try {
       setLoading(true);
-      const res = await fetch(`/api/tracking?year=${year}&month=${month}`);
+      const res = await fetch(
+        `/api/tracking?year=${currentYear}&month=${currentMonth}`
+      );
       if (res.ok) {
-        const data = await res.json();
-        setGridData(data);
+        const json = await res.json();
+        setGridData(json);
       }
     } catch (err) {
       console.error('Failed to load tracking grid:', err);
@@ -47,18 +47,24 @@ export function TrackingGrid() {
 
   useEffect(() => {
     fetchGrid();
-  }, [year, month]);
+  }, [currentYear, currentMonth]);
 
   const handlePrevMonth = () => {
-    setCurrentDate(new Date(year, month - 2, 1));
+    if (currentMonth === 1) {
+      setCurrentMonth(12);
+      setCurrentYear(currentYear - 1);
+    } else {
+      setCurrentMonth(currentMonth - 1);
+    }
   };
 
   const handleNextMonth = () => {
-    setCurrentDate(new Date(year, month, 1));
-  };
-
-  const handleTodayMonth = () => {
-    setCurrentDate(new Date());
+    if (currentMonth === 12) {
+      setCurrentMonth(1);
+      setCurrentYear(currentYear + 1);
+    } else {
+      setCurrentMonth(currentMonth + 1);
+    }
   };
 
   const handleSaveRecord = async (
@@ -68,48 +74,69 @@ export function TrackingGrid() {
     completed?: boolean,
     note?: string
   ) => {
-    await fetch('/api/records', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ taskId, date, actualValue, completed, note }),
-    });
-    await fetchGrid();
+    try {
+      const res = await fetch(`/api/tasks/${taskId}/records`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          date,
+          actualValue,
+          completed,
+          note,
+        }),
+      });
+      if (res.ok) {
+        await fetchGrid();
+      }
+    } catch (err) {
+      console.error('Failed to save record:', err);
+    }
   };
 
-  const todayStr = getTodayISO();
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
 
   return (
-    <div className="space-y-6">
-      {/* Month Navigation & Matrix Header */}
-      <div className="flex items-center justify-between flex-wrap gap-4 glass-card p-5 rounded-2xl border border-white/10">
-        <div className="flex items-center gap-3.5">
-          <div className="p-3 rounded-2xl bg-caramel-500/15 text-caramel-400 border border-caramel-500/30">
-            <Calendar className="w-6 h-6" />
+    <div className="space-y-6 pb-12">
+      {/* Month Navigation Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 glass-card p-5 rounded-2xl border border-white/10 bg-espresso-950/60">
+        <div className="flex items-center gap-3">
+          <div className="p-2.5 rounded-xl bg-caramel-500/15 text-caramel-400 border border-caramel-500/25">
+            <Calendar className="w-5 h-5" />
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-xl font-black text-white tracking-tight">
-                {monthNames[month - 1]} {year}
-              </h2>
-              <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full bg-caramel-500/20 text-caramel-300 border border-caramel-500/30">
-                Habit Matrix
-              </span>
-            </div>
-            <p className="text-xs text-mocha-300 mt-0.5">
-              Interactive monthly habit execution matrix. Click any day cell to inspect or record progress.
+            <h2 className="text-xl font-black text-white tracking-tight">
+              {monthNames[currentMonth - 1]} {currentYear}
+            </h2>
+            <p className="text-xs text-mocha-300">
+              Interactive monthly execution matrix & habit history
             </p>
           </div>
         </div>
 
-        {/* Month controls */}
         <div className="flex items-center gap-2">
           <button
-            onClick={handleTodayMonth}
-            className="px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-bold text-mocha-200 hover:text-white hover:bg-white/10 transition"
+            onClick={() => {
+              setCurrentYear(new Date().getFullYear());
+              setCurrentMonth(new Date().getMonth() + 1);
+            }}
+            className="px-3.5 py-2 rounded-xl bg-white/5 hover:bg-white/10 text-mocha-200 text-xs font-semibold border border-white/10 transition"
           >
             Today
           </button>
-          <div className="flex items-center rounded-xl bg-white/5 border border-white/10 p-1">
+          <div className="flex items-center gap-1 bg-white/5 p-1 rounded-xl border border-white/10">
             <button
               onClick={handlePrevMonth}
               className="p-1.5 rounded-lg text-mocha-300 hover:text-white hover:bg-white/10 transition"
@@ -117,9 +144,6 @@ export function TrackingGrid() {
             >
               <ChevronLeft className="w-4 h-4" />
             </button>
-            <span className="text-xs font-mono font-bold px-2 text-mocha-200">
-              {month < 10 ? `0${month}` : month}/{year}
-            </span>
             <button
               onClick={handleNextMonth}
               className="p-1.5 rounded-lg text-mocha-300 hover:text-white hover:bg-white/10 transition"
@@ -132,7 +156,7 @@ export function TrackingGrid() {
       </div>
 
       {/* Visual Status Legend */}
-      <div className="flex items-center gap-4 text-xs text-mocha-300 px-3 py-2.5 rounded-xl bg-white/5 border border-white/5 flex-wrap">
+      <div className="flex items-center gap-4 text-xs text-mocha-300 px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/5 flex-wrap">
         <span className="text-[11px] font-bold text-mocha-200 uppercase tracking-wider">Status Legend:</span>
         <div className="flex items-center gap-1.5">
           <span className="w-5 h-5 rounded-md bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 flex items-center justify-center font-bold text-[10px]">
@@ -151,6 +175,12 @@ export function TrackingGrid() {
             ○
           </span>
           <span className="text-xs text-mocha-200 font-medium">Upcoming Day</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="w-5 h-5 rounded-md bg-white/5 text-mocha-400 border border-white/10 flex items-center justify-center font-bold text-xs">
+            ·
+          </span>
+          <span className="text-xs text-mocha-200 font-medium">Rest / Off-Schedule</span>
         </div>
         <div className="flex items-center gap-1.5">
           <span className="w-5 h-5 rounded-md bg-white/5 text-mocha-500 border border-white/5 flex items-center justify-center font-bold text-[10px]">
@@ -218,6 +248,8 @@ export function TrackingGrid() {
                       ? Math.round((completedDaysCount / totalElapsedDaysCount) * 100)
                       : 0;
 
+                  const freqLabel = formatFrequencyLabel(task.frequency);
+
                   return (
                     <tr key={task.id} className="hover:bg-white/[0.02] transition">
                       {/* Sticky Task Name Column */}
@@ -226,13 +258,16 @@ export function TrackingGrid() {
                           <p className="font-bold text-white text-xs truncate max-w-[190px]">
                             {task.name}
                           </p>
-                          <div className="flex items-center gap-1.5 text-[10px] text-mocha-400">
+                          <div className="flex items-center gap-1.5 text-[10px] text-mocha-400 flex-wrap">
                             <span className="font-bold text-caramel-400 uppercase">{task.type}</span>
                             {task.target && (
                               <span>
                                 • {task.target.toLocaleString()} {task.unit || ''}
                               </span>
                             )}
+                            <span className="text-mocha-300 font-semibold bg-white/5 px-1.5 py-0.2 rounded border border-white/5">
+                              {freqLabel}
+                            </span>
                             {metrics.currentStreak > 0 && (
                               <span className="text-amber-400 flex items-center gap-0.5 ml-1 font-bold">
                                 <Flame className="w-2.5 h-2.5" />
@@ -264,6 +299,15 @@ export function TrackingGrid() {
                           cellClass +=
                             ' border border-dashed border-white/20 text-mocha-400 hover:border-white/40';
                           content = '○';
+                        } else if (status === 'inactive_freq') {
+                          if (record?.completed) {
+                            cellClass +=
+                              ' bg-emerald-500/25 text-emerald-300 border border-emerald-500/40 hover:bg-emerald-500/40';
+                            content = '✓';
+                          } else {
+                            cellClass += ' text-mocha-500 hover:text-mocha-300 hover:bg-white/5 text-xs';
+                            content = '·';
+                          }
                         } else {
                           cellClass += ' text-mocha-700 cursor-not-allowed opacity-30';
                           content = '—';
@@ -277,9 +321,9 @@ export function TrackingGrid() {
                             }`}
                           >
                             <button
-                              disabled={status === 'outside' || status === 'inactive_freq'}
+                              disabled={status === 'outside'}
                               onClick={() => {
-                                if (status !== 'outside' && status !== 'inactive_freq') {
+                                if (status !== 'outside') {
                                   setSelectedCell({
                                     task,
                                     date,
@@ -291,7 +335,7 @@ export function TrackingGrid() {
                                 }
                               }}
                               className={cellClass}
-                              title={`${task.name} - ${date} (${status})`}
+                              title={`${task.name} - ${date} (${status === 'inactive_freq' ? 'Rest / Off-schedule day' : status})`}
                             >
                               {content}
                             </button>
@@ -321,7 +365,6 @@ export function TrackingGrid() {
           </div>
         </div>
       )}
-
 
       {/* Cell Detail Inspection / Edit Modal */}
       <CellModal

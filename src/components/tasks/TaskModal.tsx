@@ -1,8 +1,26 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { X, Plus, Trash2, Clock, Calendar, Target, Sparkles, Wand2, Check } from 'lucide-react';
-import { getTodayISO } from '@/lib/dateUtils';
+import {
+  X,
+  Plus,
+  Trash2,
+  Clock,
+  Calendar,
+  Target,
+  Sparkles,
+  Wand2,
+  Check,
+  Repeat,
+  CalendarDays,
+  Flame,
+} from 'lucide-react';
+import {
+  getTodayISO,
+  parseFrequency,
+  formatFrequencyLabel,
+  FrequencyType,
+} from '@/lib/dateUtils';
 import { addDays, format, parseISO } from 'date-fns';
 
 interface TaskModalProps {
@@ -19,9 +37,19 @@ const GOAL_TEMPLATES = [
     type: 'NUMERIC' as const,
     target: '10000',
     unit: 'steps',
-    frequency: 'DAILY' as const,
+    frequency: 'DAILY',
     durationDays: 30,
     reminderTimes: ['08:00', '18:00'],
+  },
+  {
+    name: 'Gym Strength Training',
+    description: 'Weight lifting and resistance workouts.',
+    type: 'CHECKBOX' as const,
+    target: '1',
+    unit: 'session',
+    frequency: 'CUSTOM:1,3,5', // Mon, Wed, Fri
+    durationDays: 60,
+    reminderTimes: ['17:30'],
   },
   {
     name: 'Drink 2.5L Water',
@@ -29,7 +57,7 @@ const GOAL_TEMPLATES = [
     type: 'NUMERIC' as const,
     target: '2500',
     unit: 'ml',
-    frequency: 'DAILY' as const,
+    frequency: 'DAILY',
     durationDays: 30,
     reminderTimes: ['09:00', '13:00', '17:00'],
   },
@@ -39,7 +67,7 @@ const GOAL_TEMPLATES = [
     type: 'TIME' as const,
     target: '0.5',
     unit: 'hours',
-    frequency: 'DAILY' as const,
+    frequency: 'DAILY',
     durationDays: 30,
     reminderTimes: ['21:00'],
   },
@@ -49,30 +77,40 @@ const GOAL_TEMPLATES = [
     type: 'TIME' as const,
     target: '2',
     unit: 'hours',
-    frequency: 'WEEKDAYS' as const,
+    frequency: 'WEEKDAYS',
     durationDays: 60,
     reminderTimes: ['09:30'],
   },
   {
-    name: 'Morning Meditation',
-    description: 'Mindfulness breathing and mental focus session.',
+    name: 'Deep House Cleaning',
+    description: 'Tidy up rooms and organize workspace periodically.',
     type: 'CHECKBOX' as const,
     target: '1',
     unit: 'session',
-    frequency: 'DAILY' as const,
-    durationDays: 30,
-    reminderTimes: ['07:00'],
+    frequency: 'INTERVAL:3', // Every 3 days
+    durationDays: 45,
+    reminderTimes: ['10:00'],
   },
   {
-    name: 'No Sugar / Healthy Diet',
-    description: 'Avoid added refined sugars and processed snacks.',
-    type: 'CHECKBOX' as const,
+    name: 'Weekend Reflection & Review',
+    description: 'Review weekly progress, reflect on lessons, and plan next week.',
+    type: 'TIME' as const,
     target: '1',
-    unit: 'day',
-    frequency: 'DAILY' as const,
-    durationDays: 21,
-    reminderTimes: ['20:00'],
+    unit: 'hours',
+    frequency: 'WEEKENDS', // Sat & Sun
+    durationDays: 60,
+    reminderTimes: ['11:00'],
   },
+];
+
+const WEEK_DAYS = [
+  { day: 1, label: 'Mon', short: 'M' },
+  { day: 2, label: 'Tue', short: 'T' },
+  { day: 3, label: 'Wed', short: 'W' },
+  { day: 4, label: 'Thu', short: 'T' },
+  { day: 5, label: 'Fri', short: 'F' },
+  { day: 6, label: 'Sat', short: 'S' },
+  { day: 0, label: 'Sun', short: 'S' },
 ];
 
 export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalProps) {
@@ -85,7 +123,13 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
   const [endDate, setEndDate] = useState(
     format(addDays(parseISO(getTodayISO()), 30), 'yyyy-MM-dd')
   );
-  const [frequency, setFrequency] = useState<'DAILY' | 'WEEKDAYS' | 'WEEKENDS'>('DAILY');
+
+  // Custom Frequency Tracking State
+  const [freqType, setFreqType] = useState<FrequencyType>('DAILY');
+  const [customDays, setCustomDays] = useState<number[]>([1, 3, 5]); // Mon, Wed, Fri by default
+  const [intervalDays, setIntervalDays] = useState<number>(2); // Every 2 days
+  const [timesPerWeek, setTimesPerWeek] = useState<number>(3); // 3 days/week
+
   const [reminderEnabled, setReminderEnabled] = useState(false);
   const [reminderTimes, setReminderTimes] = useState<string[]>(['09:00']);
   const [newTimeInput, setNewTimeInput] = useState('18:00');
@@ -102,7 +146,14 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
       setUnit(editingTask.unit || (editingTask.type === 'TIME' ? 'hours' : 'steps'));
       setStartDate(editingTask.startDate || getTodayISO());
       setEndDate(editingTask.endDate || getTodayISO());
-      setFrequency(editingTask.frequency || 'DAILY');
+
+      // Parse existing frequency into custom controls
+      const parsed = parseFrequency(editingTask.frequency);
+      setFreqType(parsed.type);
+      setCustomDays(parsed.customDays);
+      setIntervalDays(parsed.intervalDays);
+      setTimesPerWeek(parsed.timesPerWeek);
+
       setReminderEnabled(!!editingTask.reminderEnabled);
       setReminderTimes(editingTask.reminderTimes || ['09:00']);
       setReminderMessage(editingTask.reminderMessage || '');
@@ -114,7 +165,12 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
       setUnit('steps');
       setStartDate(getTodayISO());
       setEndDate(format(addDays(parseISO(getTodayISO()), 30), 'yyyy-MM-dd'));
-      setFrequency('DAILY');
+
+      setFreqType('DAILY');
+      setCustomDays([1, 3, 5]);
+      setIntervalDays(2);
+      setTimesPerWeek(3);
+
       setReminderEnabled(false);
       setReminderTimes(['09:00']);
       setReminderMessage('');
@@ -130,7 +186,13 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
     setType(tpl.type);
     setTarget(tpl.target);
     setUnit(tpl.unit);
-    setFrequency(tpl.frequency);
+
+    const parsed = parseFrequency(tpl.frequency);
+    setFreqType(parsed.type);
+    setCustomDays(parsed.customDays);
+    setIntervalDays(parsed.intervalDays);
+    setTimesPerWeek(parsed.timesPerWeek);
+
     setStartDate(getTodayISO());
     setEndDate(format(addDays(parseISO(getTodayISO()), tpl.durationDays), 'yyyy-MM-dd'));
     setReminderEnabled(true);
@@ -149,6 +211,16 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
     }
   };
 
+  const toggleCustomDay = (dayIndex: number) => {
+    if (customDays.includes(dayIndex)) {
+      if (customDays.length > 1) {
+        setCustomDays(customDays.filter((d) => d !== dayIndex));
+      }
+    } else {
+      setCustomDays([...customDays, dayIndex].sort((a, b) => a - b));
+    }
+  };
+
   const handleAddTime = () => {
     if (newTimeInput && !reminderTimes.includes(newTimeInput)) {
       setReminderTimes([...reminderTimes, newTimeInput].sort());
@@ -157,6 +229,26 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
 
   const handleRemoveTime = (timeToRemove: string) => {
     setReminderTimes(reminderTimes.filter((t) => t !== timeToRemove));
+  };
+
+  // Compute final serialized frequency string to save
+  const buildFrequencyString = (): string => {
+    switch (freqType) {
+      case 'DAILY':
+        return 'DAILY';
+      case 'WEEKDAYS':
+        return 'WEEKDAYS';
+      case 'WEEKENDS':
+        return 'WEEKENDS';
+      case 'CUSTOM_DAYS':
+        return `CUSTOM:${customDays.join(',')}`;
+      case 'INTERVAL':
+        return `INTERVAL:${Math.max(1, intervalDays)}`;
+      case 'TIMES_PER_WEEK':
+        return `WEEKLY:${Math.max(1, Math.min(7, timesPerWeek))}`;
+      default:
+        return 'DAILY';
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -186,6 +278,8 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
       }
     }
 
+    const frequencyStr = buildFrequencyString();
+
     try {
       setLoading(true);
       const payload = {
@@ -196,7 +290,7 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
         unit: type !== 'CHECKBOX' ? unit.trim() : undefined,
         startDate,
         endDate,
-        frequency,
+        frequency: frequencyStr,
         reminderEnabled,
         reminderTimes,
         reminderMessage: reminderMessage.trim() || undefined,
@@ -224,6 +318,9 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
       setLoading(false);
     }
   };
+
+  const currentComputedFreq = buildFrequencyString();
+  const currentFormattedLabel = formatFrequencyLabel(currentComputedFreq);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in overflow-y-auto">
@@ -284,7 +381,7 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
               <input
                 type="text"
                 required
-                placeholder="e.g. 10,000 Steps, Deep Work, Read 30 Mins"
+                placeholder="e.g. 10,000 Steps, Gym Workout, Read 30 Mins"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-mocha-400 focus:outline-none focus:border-caramel-500 text-sm transition"
@@ -305,55 +402,70 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
             </div>
           </div>
 
-          {/* Section 2: Goal Type & Targets */}
+          {/* Section 2: Habit Type & Target Values */}
           <div className="space-y-3 pt-2 border-t border-white/10">
-            <div>
-              <label className="block text-xs font-bold text-mocha-200 mb-1.5">
-                Goal Type *
-              </label>
-              <div className="grid grid-cols-3 gap-2.5">
-                {[
-                  { id: 'CHECKBOX', label: 'Checkbox', desc: 'Manual completion' },
-                  { id: 'NUMERIC', label: 'Numeric', desc: 'Steps, pages, count' },
-                  { id: 'TIME', label: 'Time', desc: 'Hours, minutes' },
-                ].map((t) => (
-                  <button
-                    key={t.id}
-                    type="button"
-                    onClick={() => handleTypeChange(t.id as any)}
-                    className={`p-3 rounded-xl border text-left transition-all ${
-                      type === t.id
-                        ? 'bg-caramel-600/20 border-caramel-500 text-white shadow-md shadow-caramel-500/20'
-                        : 'bg-white/5 border-white/5 text-mocha-300 hover:bg-white/10 hover:text-mocha-100'
-                    }`}
-                  >
-                    <p className="text-xs font-bold text-white">{t.label}</p>
-                    <p className="text-[10px] text-mocha-300 mt-0.5">{t.desc}</p>
-                  </button>
-                ))}
-              </div>
+            <label className="block text-xs font-bold text-mocha-200">
+              Tracking Metric Type
+            </label>
+            <div className="grid grid-cols-3 gap-2">
+              <button
+                type="button"
+                onClick={() => handleTypeChange('CHECKBOX')}
+                className={`p-3 rounded-xl border text-left space-y-1 transition-all ${
+                  type === 'CHECKBOX'
+                    ? 'border-caramel-500 bg-caramel-500/15 shadow-sm'
+                    : 'border-white/10 bg-white/5 hover:border-white/20'
+                }`}
+              >
+                <span className="block text-xs font-bold text-white">✓ Checkbox</span>
+                <span className="block text-[10px] text-mocha-300">Simple Yes / No</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleTypeChange('NUMERIC')}
+                className={`p-3 rounded-xl border text-left space-y-1 transition-all ${
+                  type === 'NUMERIC'
+                    ? 'border-caramel-500 bg-caramel-500/15 shadow-sm'
+                    : 'border-white/10 bg-white/5 hover:border-white/20'
+                }`}
+              >
+                <span className="block text-xs font-bold text-white"># Numeric Target</span>
+                <span className="block text-[10px] text-mocha-300">Steps, ml, pages...</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleTypeChange('TIME')}
+                className={`p-3 rounded-xl border text-left space-y-1 transition-all ${
+                  type === 'TIME'
+                    ? 'border-caramel-500 bg-caramel-500/15 shadow-sm'
+                    : 'border-white/10 bg-white/5 hover:border-white/20'
+                }`}
+              >
+                <span className="block text-xs font-bold text-white">⏱️ Duration / Time</span>
+                <span className="block text-[10px] text-mocha-300">Hours or minutes</span>
+              </button>
             </div>
 
-            {/* Target & Unit (for numeric/time) */}
             {type !== 'CHECKBOX' && (
               <div className="grid grid-cols-2 gap-3 p-3.5 rounded-xl bg-white/5 border border-white/5">
                 <div>
-                  <label className="block text-xs font-bold text-mocha-200 mb-1">
-                    Daily Target *
+                  <label className="block text-[11px] font-bold text-mocha-200 mb-1">
+                    Daily Target Value *
                   </label>
                   <input
                     type="number"
                     step="any"
                     required
-                    min="0.01"
                     placeholder={type === 'TIME' ? '2' : '10000'}
                     value={target}
                     onChange={(e) => setTarget(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-espresso-950 border border-white/10 text-white text-sm focus:outline-none focus:border-caramel-500"
+                    className="w-full px-3 py-2 rounded-lg bg-espresso-950 border border-white/10 text-white text-sm font-mono focus:outline-none focus:border-caramel-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-mocha-200 mb-1">
+                  <label className="block text-[11px] font-bold text-mocha-200 mb-1">
                     Measurement Unit
                   </label>
                   <input
@@ -368,7 +480,7 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
             )}
           </div>
 
-          {/* Section 3: Duration & Frequency */}
+          {/* Section 3: Duration Dates */}
           <div className="space-y-3 pt-2 border-t border-white/10">
             <div className="grid grid-cols-2 gap-3">
               <div>
@@ -399,23 +511,256 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
               </div>
             </div>
 
-            <div>
-              <label className="block text-xs font-bold text-mocha-200 mb-1">
-                Tracking Frequency
-              </label>
-              <select
-                value={frequency}
-                onChange={(e) => setFrequency(e.target.value as any)}
-                className="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-bold focus:outline-none focus:border-caramel-500"
-              >
-                <option value="DAILY" className="bg-espresso-950 text-white">Everyday (Daily)</option>
-                <option value="WEEKDAYS" className="bg-espresso-950 text-white">Weekdays Only (Mon - Fri)</option>
-                <option value="WEEKENDS" className="bg-espresso-950 text-white">Weekends Only (Sat - Sun)</option>
-              </select>
+            {/* Section 4: Customized Frequency Tracking */}
+            <div className="space-y-3 pt-3 border-t border-white/10">
+              <div className="flex items-center justify-between">
+                <label className="block text-xs font-bold text-mocha-200 flex items-center gap-1.5">
+                  <Repeat className="w-3.5 h-3.5 text-caramel-400" />
+                  <span>Custom Frequency Tracking</span>
+                </label>
+                <span className="text-[11px] font-bold text-caramel-300 bg-caramel-500/15 px-2 py-0.5 rounded-md border border-caramel-500/25">
+                  {currentFormattedLabel}
+                </span>
+              </div>
+
+              {/* Frequency Mode Selector Tabs */}
+              <div className="grid grid-cols-3 gap-1.5 p-1 rounded-xl bg-white/5 border border-white/10">
+                <button
+                  type="button"
+                  onClick={() => setFreqType('DAILY')}
+                  className={`py-1.5 px-2 rounded-lg text-xs font-bold transition-all ${
+                    freqType === 'DAILY'
+                      ? 'bg-caramel-600 text-white shadow-sm'
+                      : 'text-mocha-300 hover:text-white'
+                  }`}
+                >
+                  Every Day
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFreqType('WEEKDAYS')}
+                  className={`py-1.5 px-2 rounded-lg text-xs font-bold transition-all ${
+                    freqType === 'WEEKDAYS'
+                      ? 'bg-caramel-600 text-white shadow-sm'
+                      : 'text-mocha-300 hover:text-white'
+                  }`}
+                >
+                  Mon – Fri
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFreqType('WEEKENDS')}
+                  className={`py-1.5 px-2 rounded-lg text-xs font-bold transition-all ${
+                    freqType === 'WEEKENDS'
+                      ? 'bg-caramel-600 text-white shadow-sm'
+                      : 'text-mocha-300 hover:text-white'
+                  }`}
+                >
+                  Sat & Sun
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFreqType('CUSTOM_DAYS')}
+                  className={`py-1.5 px-2 rounded-lg text-xs font-bold transition-all ${
+                    freqType === 'CUSTOM_DAYS'
+                      ? 'bg-caramel-600 text-white shadow-sm'
+                      : 'text-mocha-300 hover:text-white'
+                  }`}
+                >
+                  Specific Days
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFreqType('INTERVAL')}
+                  className={`py-1.5 px-2 rounded-lg text-xs font-bold transition-all ${
+                    freqType === 'INTERVAL'
+                      ? 'bg-caramel-600 text-white shadow-sm'
+                      : 'text-mocha-300 hover:text-white'
+                  }`}
+                >
+                  Every N Days
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setFreqType('TIMES_PER_WEEK')}
+                  className={`py-1.5 px-2 rounded-lg text-xs font-bold transition-all ${
+                    freqType === 'TIMES_PER_WEEK'
+                      ? 'bg-caramel-600 text-white shadow-sm'
+                      : 'text-mocha-300 hover:text-white'
+                  }`}
+                >
+                  N Times / Wk
+                </button>
+              </div>
+
+              {/* Mode 1: Specific Days Picker */}
+              {freqType === 'CUSTOM_DAYS' && (
+                <div className="p-3.5 rounded-xl bg-white/5 border border-white/5 space-y-3 animate-fade-in">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-white">Choose Active Days</span>
+                    {/* Quick day shortcuts */}
+                    <div className="flex items-center gap-1">
+                      <button
+                        type="button"
+                        onClick={() => setCustomDays([1, 3, 5])}
+                        className="px-2 py-0.5 rounded text-[10px] font-semibold bg-white/5 hover:bg-white/10 text-mocha-200 transition"
+                      >
+                        MWF
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setCustomDays([2, 4, 6])}
+                        className="px-2 py-0.5 rounded text-[10px] font-semibold bg-white/5 hover:bg-white/10 text-mocha-200 transition"
+                      >
+                        TTS
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setCustomDays([1, 2, 3, 4, 5])}
+                        className="px-2 py-0.5 rounded text-[10px] font-semibold bg-white/5 hover:bg-white/10 text-mocha-200 transition"
+                      >
+                        Mon-Fri
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Circular Day Toggle Buttons */}
+                  <div className="grid grid-cols-7 gap-1.5">
+                    {WEEK_DAYS.map(({ day, label, short }) => {
+                      const isSelected = customDays.includes(day);
+                      return (
+                        <button
+                          key={day}
+                          type="button"
+                          onClick={() => toggleCustomDay(day)}
+                          className={`py-2 px-1 rounded-xl flex flex-col items-center justify-center gap-0.5 transition-all ${
+                            isSelected
+                              ? 'bg-caramel-500 text-white shadow-md shadow-caramel-500/30 border border-caramel-400 font-bold scale-[1.02]'
+                              : 'bg-espresso-950/80 text-mocha-400 border border-white/10 hover:border-white/20 hover:text-white'
+                          }`}
+                        >
+                          <span className="text-[11px] font-extrabold">{short}</span>
+                          <span className="text-[9px] opacity-80">{label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
+              {/* Mode 2: Interval / Cyclic Repeater */}
+              {freqType === 'INTERVAL' && (
+                <div className="p-3.5 rounded-xl bg-white/5 border border-white/5 space-y-3 animate-fade-in">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-white">Repeat Cycle Interval</span>
+                    <span className="text-[11px] font-mono text-mocha-300">
+                      {intervalDays === 2 ? 'Alternate days' : `Every ${intervalDays} days`}
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setIntervalDays(Math.max(1, intervalDays - 1))}
+                      className="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white font-black text-base flex items-center justify-center transition active:scale-95"
+                    >
+                      -
+                    </button>
+                    <div className="flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-espresso-950 border border-white/10">
+                      <span className="text-sm font-extrabold text-caramel-400 font-mono">
+                        Every {intervalDays}
+                      </span>
+                      <span className="text-xs text-mocha-300">day(s)</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setIntervalDays(Math.min(30, intervalDays + 1))}
+                      className="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white font-black text-base flex items-center justify-center transition active:scale-95"
+                    >
+                      +
+                    </button>
+                  </div>
+
+                  {/* Quick interval presets */}
+                  <div className="flex items-center gap-1.5 flex-wrap pt-1">
+                    {[
+                      { days: 2, label: 'Alternate (Every 2d)' },
+                      { days: 3, label: 'Every 3 days' },
+                      { days: 4, label: 'Every 4 days' },
+                      { days: 7, label: 'Weekly (Every 7d)' },
+                    ].map((p) => (
+                      <button
+                        key={p.days}
+                        type="button"
+                        onClick={() => setIntervalDays(p.days)}
+                        className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition ${
+                          intervalDays === p.days
+                            ? 'bg-caramel-500/25 text-caramel-300 border border-caramel-500/40'
+                            : 'bg-white/5 text-mocha-300 hover:bg-white/10 hover:text-white'
+                        }`}
+                      >
+                        {p.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Mode 3: Times Per Week */}
+              {freqType === 'TIMES_PER_WEEK' && (
+                <div className="p-3.5 rounded-xl bg-white/5 border border-white/5 space-y-3 animate-fade-in">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-white">Flexible Weekly Target</span>
+                    <span className="text-[11px] font-mono text-mocha-300">
+                      {timesPerWeek} out of 7 days
+                    </span>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={() => setTimesPerWeek(Math.max(1, timesPerWeek - 1))}
+                      className="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white font-black text-base flex items-center justify-center transition active:scale-95"
+                    >
+                      -
+                    </button>
+                    <div className="flex-1 flex items-center justify-center gap-2 py-2 px-4 rounded-xl bg-espresso-950 border border-white/10">
+                      <span className="text-sm font-extrabold text-caramel-400 font-mono">
+                        {timesPerWeek}
+                      </span>
+                      <span className="text-xs text-mocha-300">day(s) per week</span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setTimesPerWeek(Math.min(7, timesPerWeek + 1))}
+                      className="w-9 h-9 rounded-xl bg-white/10 hover:bg-white/20 text-white font-black text-base flex items-center justify-center transition active:scale-95"
+                    >
+                      +
+                    </button>
+                  </div>
+
+                  <div className="flex items-center justify-between gap-1 pt-1">
+                    {[1, 2, 3, 4, 5, 6, 7].map((num) => (
+                      <button
+                        key={num}
+                        type="button"
+                        onClick={() => setTimesPerWeek(num)}
+                        className={`flex-1 py-1 rounded-lg text-xs font-bold transition ${
+                          timesPerWeek === num
+                            ? 'bg-caramel-500 text-white shadow-sm'
+                            : 'bg-white/5 text-mocha-300 hover:bg-white/10'
+                        }`}
+                      >
+                        {num}x
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
-          {/* Section 4: Scheduled Reminders */}
+          {/* Section 5: Scheduled Reminders */}
           <div className="p-4 rounded-2xl bg-white/5 border border-white/5 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -516,6 +861,5 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
         </form>
       </div>
     </div>
-
   );
 }
