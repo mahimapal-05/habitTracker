@@ -20,7 +20,7 @@ export function MobileNav({ onOpenCreateTask }: MobileNavProps) {
   ];
 
   return (
-    <nav className="md:hidden fixed bottom-3 left-4 right-4 z-40 bg-slate-900/90 backdrop-blur-2xl border border-white/15 rounded-2xl px-3 py-2 flex items-center justify-around shadow-2xl shadow-black/80">
+    <nav className="md:hidden fixed bottom-3 left-4 right-4 z-40 bg-espresso-950/92 backdrop-blur-2xl border border-white/15 rounded-2xl px-3 py-2 flex items-center justify-around shadow-2xl shadow-black/80">
       {navItems.slice(0, 2).map((item) => {
         const Icon = item.icon;
         const isActive = pathname === item.href;
@@ -30,8 +30,8 @@ export function MobileNav({ onOpenCreateTask }: MobileNavProps) {
             href={item.href}
             className={`flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-[11px] font-bold transition-all duration-200 ${
               isActive
-                ? 'text-indigo-400 bg-indigo-500/15'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'text-caramel-300 bg-caramel-500/20'
+                : 'text-mocha-300 hover:text-white'
             }`}
           >
             <Icon className="w-4 h-4" />
@@ -43,7 +43,7 @@ export function MobileNav({ onOpenCreateTask }: MobileNavProps) {
       {onOpenCreateTask && (
         <button
           onClick={onOpenCreateTask}
-          className="-mt-6 p-3 rounded-2xl gradient-primary text-white shadow-xl shadow-indigo-500/40 border border-white/20 active:scale-95 transition-all duration-200"
+          className="-mt-6 p-3 rounded-2xl gradient-primary text-white shadow-xl shadow-caramel-600/40 border border-white/20 active:scale-95 transition-all duration-200"
           aria-label="Create New Goal"
         >
           <Plus className="w-5 h-5" />
@@ -59,8 +59,8 @@ export function MobileNav({ onOpenCreateTask }: MobileNavProps) {
             href={item.href}
             className={`flex flex-col items-center gap-1 py-1 px-3 rounded-xl text-[11px] font-bold transition-all duration-200 ${
               isActive
-                ? 'text-indigo-400 bg-indigo-500/15'
-                : 'text-slate-400 hover:text-slate-200'
+                ? 'text-caramel-300 bg-caramel-500/20'
+                : 'text-mocha-300 hover:text-white'
             }`}
           >
             <Icon className="w-4 h-4" />
@@ -69,5 +69,6 @@ export function MobileNav({ onOpenCreateTask }: MobileNavProps) {
         );
       })}
     </nav>
+
   );
 }

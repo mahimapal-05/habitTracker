@@ -28,16 +28,16 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex items-center justify-center p-4 relative overflow-hidden selection:bg-indigo-500 selection:text-white">
-      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[550px] h-[400px] bg-indigo-600/20 blur-[140px] rounded-full pointer-events-none" />
+    <div className="min-h-screen bg-espresso-950 text-mocha-100 flex items-center justify-center p-4 relative overflow-hidden selection:bg-caramel-500 selection:text-white">
+      <div className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[550px] h-[400px] bg-caramel-600/20 blur-[140px] rounded-full pointer-events-none" />
 
-      <div className="w-full max-w-md rounded-2xl glass-panel p-8 border border-white/15 bg-slate-950/95 relative z-10 space-y-6 shadow-2xl backdrop-blur-2xl">
+      <div className="w-full max-w-md rounded-2xl glass-panel p-8 border border-white/15 bg-espresso-950/95 relative z-10 space-y-6 shadow-2xl backdrop-blur-2xl">
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl gradient-primary flex items-center justify-center mx-auto shadow-lg shadow-indigo-500/35">
+          <div className="w-12 h-12 rounded-2xl gradient-primary flex items-center justify-center mx-auto shadow-lg shadow-caramel-500/35">
             <Flame className="w-7 h-7 text-white" />
           </div>
           <h2 className="text-2xl font-black text-white tracking-tight">Create your Account</h2>
-          <p className="text-xs text-slate-400">Start building daily habit consistency with Momentum</p>
+          <p className="text-xs text-mocha-300">Start building daily habit consistency with Momentum</p>
         </div>
 
         {error && (
@@ -48,39 +48,39 @@ export default function RegisterPage() {
 
         <form onSubmit={handleRegister} className="space-y-4">
           <div>
-            <label className="block text-xs font-bold text-slate-300 mb-1">Full Name</label>
+            <label className="block text-xs font-bold text-mocha-200 mb-1">Full Name</label>
             <div className="relative">
-              <User className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <User className="w-4 h-4 text-mocha-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="text"
                 required
                 placeholder="e.g. Alex Rivera"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-indigo-500 transition"
+                className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-mocha-500 text-xs focus:outline-none focus:border-caramel-500 transition"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-300 mb-1">Email Address</label>
+            <label className="block text-xs font-bold text-mocha-200 mb-1">Email Address</label>
             <div className="relative">
-              <Mail className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Mail className="w-4 h-4 text-mocha-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type="email"
                 required
                 placeholder="you@example.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-indigo-500 transition"
+                className="w-full pl-10 pr-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-mocha-500 text-xs focus:outline-none focus:border-caramel-500 transition"
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-xs font-bold text-slate-300 mb-1">Password</label>
+            <label className="block text-xs font-bold text-mocha-200 mb-1">Password</label>
             <div className="relative">
-              <Lock className="w-4 h-4 text-slate-500 absolute left-3.5 top-1/2 -translate-y-1/2" />
+              <Lock className="w-4 h-4 text-mocha-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
               <input
                 type={showPassword ? 'text' : 'password'}
                 required
@@ -88,12 +88,12 @@ export default function RegisterPage() {
                 placeholder="At least 6 characters"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-indigo-500 transition"
+                className="w-full pl-10 pr-10 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-mocha-500 text-xs focus:outline-none focus:border-caramel-500 transition"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                className="absolute right-3.5 top-1/2 -translate-y-1/2 text-mocha-400 hover:text-mocha-200"
               >
                 {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
@@ -103,16 +103,16 @@ export default function RegisterPage() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl gradient-primary text-white font-black text-xs shadow-lg shadow-indigo-500/25 hover:opacity-95 transition-all disabled:opacity-50 active:scale-98"
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl gradient-primary text-white font-black text-xs shadow-lg shadow-caramel-500/25 hover:opacity-95 transition-all disabled:opacity-50 active:scale-98"
           >
             <span>{loading ? 'Creating account...' : 'Create Free Account'}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
 
-        <p className="text-center text-xs text-slate-400">
+        <p className="text-center text-xs text-mocha-400">
           Already have an account?{' '}
-          <Link href="/login" className="text-indigo-400 font-bold hover:underline">
+          <Link href="/login" className="text-caramel-400 font-bold hover:underline">
             Sign In
           </Link>
         </p>

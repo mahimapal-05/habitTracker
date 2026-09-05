@@ -53,8 +53,8 @@ export function AnalyticsView() {
 
   if (loading) {
     return (
-      <div className="glass-card p-16 text-center text-slate-400 text-sm space-y-3">
-        <div className="w-6 h-6 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin mx-auto" />
+      <div className="glass-card p-16 text-center text-mocha-300 text-sm space-y-3">
+        <div className="w-6 h-6 border-2 border-caramel-500 border-t-transparent rounded-full animate-spin mx-auto" />
         <p>Computing analytics and trend charts...</p>
       </div>
     );
@@ -62,8 +62,8 @@ export function AnalyticsView() {
 
   if (!data || data.tasks.length === 0) {
     return (
-      <div className="glass-card p-14 text-center text-slate-400 space-y-3">
-        <div className="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mx-auto">
+      <div className="glass-card p-14 text-center text-mocha-300 space-y-3">
+        <div className="w-12 h-12 rounded-2xl bg-caramel-500/10 text-caramel-400 flex items-center justify-center mx-auto">
           <Sparkles className="w-6 h-6" />
         </div>
         <p className="text-base font-bold text-white">No habit data available</p>
@@ -81,72 +81,72 @@ export function AnalyticsView() {
     <div className="space-y-8 pb-12">
       {/* Overall Overview Cards */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="glass-card-interactive p-5 rounded-2xl space-y-2 border-l-4 border-l-indigo-500">
+        <div className="glass-card-interactive p-5 rounded-2xl space-y-2 border-l-4 border-l-caramel-500">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+            <span className="text-xs font-bold text-mocha-400 uppercase tracking-wider">
               Today's Rate
             </span>
-            <CheckCircle2 className="w-4 h-4 text-indigo-400" />
+            <CheckCircle2 className="w-4 h-4 text-caramel-400" />
           </div>
           <p className="text-2xl sm:text-3xl font-black text-white">{data.todayCompletionRate}%</p>
-          <p className="text-[11px] text-slate-400">
+          <p className="text-[11px] text-mocha-300">
             {data.todayCompletedCount} of {data.totalActiveTasksToday} tasks finished today
           </p>
         </div>
 
         <div className="glass-card-interactive p-5 rounded-2xl space-y-2 border-l-4 border-l-emerald-500">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+            <span className="text-xs font-bold text-mocha-400 uppercase tracking-wider">
               Overall Success
             </span>
             <TrendingUp className="w-4 h-4 text-emerald-400" />
           </div>
           <p className="text-2xl sm:text-3xl font-black text-white">{data.overallHistoricalRate}%</p>
-          <p className="text-[11px] text-slate-400">Historical consistency across all elapsed days</p>
+          <p className="text-[11px] text-mocha-300">Historical consistency across all elapsed days</p>
         </div>
 
         <div className="glass-card-interactive p-5 rounded-2xl space-y-2 border-l-4 border-l-amber-500">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+            <span className="text-xs font-bold text-mocha-400 uppercase tracking-wider">
               Top Active Streak
             </span>
             <Flame className="w-4 h-4 text-amber-400" />
           </div>
           <p className="text-2xl sm:text-3xl font-black text-amber-400">
             {data.longestCurrentStreak?.streak ?? 0}{' '}
-            <span className="text-sm font-bold text-slate-400">days</span>
+            <span className="text-sm font-bold text-mocha-300">days</span>
           </p>
-          <p className="text-[11px] text-slate-400 truncate">
+          <p className="text-[11px] text-mocha-300 truncate">
             {data.longestCurrentStreak?.taskName || 'Keep consistent'}
           </p>
         </div>
 
-        <div className="glass-card-interactive p-5 rounded-2xl space-y-2 border-l-4 border-l-purple-500">
+        <div className="glass-card-interactive p-5 rounded-2xl space-y-2 border-l-4 border-l-latte-500">
           <div className="flex items-center justify-between">
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+            <span className="text-xs font-bold text-mocha-400 uppercase tracking-wider">
               All-Time Best
             </span>
-            <Trophy className="w-4 h-4 text-yellow-400" />
+            <Trophy className="w-4 h-4 text-amber-400" />
           </div>
           <p className="text-2xl sm:text-3xl font-black text-white">
             {data.longestBestStreak?.streak ?? 0}{' '}
-            <span className="text-sm font-bold text-slate-400">days</span>
+            <span className="text-sm font-bold text-mocha-300">days</span>
           </p>
-          <p className="text-[11px] text-slate-400 truncate">
+          <p className="text-[11px] text-mocha-300 truncate">
             {data.longestBestStreak?.taskName || 'Personal record'}
           </p>
         </div>
       </div>
 
       {/* Task Performance Deep Dive Section */}
-      <div className="glass-card p-6 rounded-2xl space-y-6 border border-white/10">
+      <div className="glass-card p-6 rounded-2xl space-y-6 border border-white/10 bg-espresso-950/60">
         <div className="flex items-center justify-between flex-wrap gap-4 border-b border-white/10 pb-4">
           <div>
             <h3 className="text-base font-black text-white flex items-center gap-2">
-              <BarChart3 className="w-5 h-5 text-indigo-400" />
+              <BarChart3 className="w-5 h-5 text-caramel-400" />
               <span>Goal Performance Trends</span>
             </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-mocha-300 mt-0.5">
               Select a habit to inspect historical performance curves and target reference lines.
             </p>
           </div>
@@ -155,10 +155,10 @@ export function AnalyticsView() {
           <select
             value={selectedTaskId || ''}
             onChange={(e) => setSelectedTaskId(e.target.value)}
-            className="px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-bold focus:outline-none focus:border-indigo-500 transition"
+            className="px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-bold focus:outline-none focus:border-caramel-500 transition"
           >
             {data.tasks.map((t: any) => (
-              <option key={t.taskId} value={t.taskId} className="bg-slate-900 text-white">
+              <option key={t.taskId} value={t.taskId} className="bg-espresso-950 text-white">
                 {t.taskName} ({t.type})
               </option>
             ))}
@@ -170,7 +170,7 @@ export function AnalyticsView() {
             {/* Task KPIs */}
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
               <div className="p-3.5 rounded-xl bg-white/5 border border-white/5 text-center">
-                <p className="text-[11px] font-bold text-slate-400 uppercase">Current Streak</p>
+                <p className="text-[11px] font-bold text-mocha-400 uppercase">Current Streak</p>
                 <p className="text-lg font-black text-amber-400 flex items-center justify-center gap-1 mt-0.5">
                   <Flame className="w-4 h-4" />
                   <span>{selectedTask.currentStreak}d</span>
@@ -178,22 +178,22 @@ export function AnalyticsView() {
               </div>
 
               <div className="p-3.5 rounded-xl bg-white/5 border border-white/5 text-center">
-                <p className="text-[11px] font-bold text-slate-400 uppercase">Best Streak</p>
-                <p className="text-lg font-black text-yellow-400 flex items-center justify-center gap-1 mt-0.5">
-                  <Trophy className="w-4 h-4" />
+                <p className="text-[11px] font-bold text-mocha-400 uppercase">Best Streak</p>
+                <p className="text-lg font-black text-amber-300 flex items-center justify-center gap-1 mt-0.5">
+                  <Trophy className="w-4 h-4 text-amber-400" />
                   <span>{selectedTask.bestStreak}d</span>
                 </p>
               </div>
 
               <div className="p-3.5 rounded-xl bg-white/5 border border-white/5 text-center">
-                <p className="text-[11px] font-bold text-slate-400 uppercase">Success Rate</p>
+                <p className="text-[11px] font-bold text-mocha-400 uppercase">Success Rate</p>
                 <p className="text-lg font-black text-emerald-400 mt-0.5">
                   {selectedTask.completionRate}%
                 </p>
               </div>
 
               <div className="p-3.5 rounded-xl bg-white/5 border border-white/5 text-center">
-                <p className="text-[11px] font-bold text-slate-400 uppercase">Days Completed</p>
+                <p className="text-[11px] font-bold text-mocha-400 uppercase">Days Completed</p>
                 <p className="text-lg font-black text-white mt-0.5">
                   {selectedTask.totalCompletedDays} / {selectedTask.totalActiveDaysElapsed}
                 </p>
@@ -202,37 +202,37 @@ export function AnalyticsView() {
               {selectedTask.type !== 'CHECKBOX' ? (
                 <>
                   <div className="p-3.5 rounded-xl bg-white/5 border border-white/5 text-center">
-                    <p className="text-[11px] font-bold text-slate-400 uppercase">Average Actual</p>
-                    <p className="text-lg font-black text-indigo-400 mt-0.5">
+                    <p className="text-[11px] font-bold text-mocha-400 uppercase">Average Actual</p>
+                    <p className="text-lg font-black text-caramel-300 mt-0.5">
                       {selectedTask.averageActual !== null
                         ? selectedTask.averageActual.toLocaleString()
                         : '—'}{' '}
-                      <span className="text-[10px] text-slate-400">{selectedTask.unit || ''}</span>
+                      <span className="text-[10px] text-mocha-400">{selectedTask.unit || ''}</span>
                     </p>
                   </div>
 
                   <div className="p-3.5 rounded-xl bg-white/5 border border-white/5 text-center">
-                    <p className="text-[11px] font-bold text-slate-400 uppercase">Personal Best</p>
-                    <p className="text-lg font-black text-purple-400 mt-0.5">
+                    <p className="text-[11px] font-bold text-mocha-400 uppercase">Personal Best</p>
+                    <p className="text-lg font-black text-amber-300 mt-0.5">
                       {selectedTask.personalBestActual !== null
                         ? selectedTask.personalBestActual.toLocaleString()
                         : '—'}{' '}
-                      <span className="text-[10px] text-slate-400">{selectedTask.unit || ''}</span>
+                      <span className="text-[10px] text-mocha-400">{selectedTask.unit || ''}</span>
                     </p>
                   </div>
                 </>
               ) : (
                 <>
                   <div className="p-3.5 rounded-xl bg-white/5 border border-white/5 text-center">
-                    <p className="text-[11px] font-bold text-slate-400 uppercase">Goal Duration</p>
+                    <p className="text-[11px] font-bold text-mocha-400 uppercase">Goal Duration</p>
                     <p className="text-xs font-bold text-white mt-1">
                       {selectedTask.startDate} → {selectedTask.endDate}
                     </p>
                   </div>
 
                   <div className="p-3.5 rounded-xl bg-white/5 border border-white/5 text-center">
-                    <p className="text-[11px] font-bold text-slate-400 uppercase">Goal Type</p>
-                    <p className="text-xs font-bold text-indigo-300 mt-1">
+                    <p className="text-[11px] font-bold text-mocha-400 uppercase">Goal Type</p>
+                    <p className="text-xs font-bold text-caramel-300 mt-1">
                       Manual Checklist
                     </p>
                   </div>
@@ -243,10 +243,10 @@ export function AnalyticsView() {
             {/* Interactive Trend Chart for Numeric & Time Goals */}
             {selectedTask.type !== 'CHECKBOX' && selectedTask.chartData?.length > 0 ? (
               <div className="space-y-3 pt-2">
-                <div className="flex items-center justify-between text-xs text-slate-400">
+                <div className="flex items-center justify-between text-xs text-mocha-300">
                   <div className="flex items-center gap-4">
-                    <span className="flex items-center gap-1.5 font-semibold text-indigo-300">
-                      <span className="w-3 h-3 rounded-full bg-indigo-500 shadow-sm" />
+                    <span className="flex items-center gap-1.5 font-semibold text-caramel-300">
+                      <span className="w-3 h-3 rounded-full bg-caramel-500 shadow-sm" />
                       <span>Actual Performance</span>
                     </span>
                     <span className="flex items-center gap-1.5 font-semibold text-emerald-400">
@@ -264,19 +264,19 @@ export function AnalyticsView() {
                     >
                       <defs>
                         <linearGradient id="actualGradient" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#6366f1" stopOpacity={0.45} />
-                          <stop offset="95%" stopColor="#6366f1" stopOpacity={0.0} />
+                          <stop offset="5%" stopColor="#c97d3e" stopOpacity={0.5} />
+                          <stop offset="95%" stopColor="#c97d3e" stopOpacity={0.0} />
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.06)" />
                       <XAxis
                         dataKey="displayDate"
-                        stroke="#64748b"
+                        stroke="#968172"
                         fontSize={11}
                         tickLine={false}
                       />
                       <YAxis
-                        stroke="#64748b"
+                        stroke="#968172"
                         fontSize={11}
                         tickLine={false}
                         domain={[0, 'auto']}
@@ -286,9 +286,9 @@ export function AnalyticsView() {
                           if (active && payload && payload.length) {
                             const d = payload[0].payload;
                             return (
-                              <div className="glass-panel p-3.5 rounded-xl border border-white/20 bg-slate-950/95 text-xs shadow-2xl space-y-1.5 backdrop-blur-xl">
+                              <div className="glass-panel p-3.5 rounded-xl border border-white/20 bg-espresso-950/98 text-xs shadow-2xl space-y-1.5 backdrop-blur-xl">
                                 <p className="font-black text-white">{label}</p>
-                                <p className="text-indigo-300">
+                                <p className="text-caramel-300">
                                   Actual:{' '}
                                   <span className="font-bold font-mono">
                                     {d.actual !== null ? d.actual.toLocaleString() : 'Not logged'}{' '}
@@ -301,11 +301,11 @@ export function AnalyticsView() {
                                     {d.target?.toLocaleString()} {selectedTask.unit || ''}
                                   </span>
                                 </p>
-                                <p className="text-slate-400">
+                                <p className="text-mocha-300">
                                   Status:{' '}
                                   <span
                                     className={
-                                      d.completed ? 'text-emerald-400 font-bold' : 'text-slate-400'
+                                      d.completed ? 'text-emerald-400 font-bold' : 'text-mocha-400'
                                     }
                                   >
                                     {d.completed ? '✓ Met Target' : 'Incomplete'}
@@ -334,7 +334,7 @@ export function AnalyticsView() {
                       <Area
                         type="monotone"
                         dataKey="actual"
-                        stroke="#6366f1"
+                        stroke="#c97d3e"
                         strokeWidth={3}
                         fillOpacity={1}
                         fill="url(#actualGradient)"
@@ -344,8 +344,8 @@ export function AnalyticsView() {
                 </div>
               </div>
             ) : (
-              <div className="p-8 rounded-2xl bg-white/5 border border-white/5 text-center text-xs text-slate-400 space-y-2">
-                <Target className="w-8 h-8 mx-auto text-indigo-400" />
+              <div className="p-8 rounded-2xl bg-white/5 border border-white/5 text-center text-xs text-mocha-300 space-y-2">
+                <Target className="w-8 h-8 mx-auto text-caramel-400" />
                 <p className="font-bold text-white">Checkbox Habit Tracking</p>
                 <p className="max-w-md mx-auto">
                   Checkbox habits track discrete daily completion. Switch to a Numeric or Time goal in the dropdown to view value curve trend graphs.
@@ -357,7 +357,7 @@ export function AnalyticsView() {
       </div>
 
       {/* Habit Consistency Leaderboard */}
-      <div className="glass-card p-6 rounded-2xl space-y-4 border border-white/10">
+      <div className="glass-card p-6 rounded-2xl space-y-4 border border-white/10 bg-espresso-950/60">
         <div className="flex items-center gap-2">
           <Award className="w-5 h-5 text-amber-400" />
           <h3 className="text-base font-black text-white">Habit Consistency Leaderboard</h3>
@@ -366,7 +366,7 @@ export function AnalyticsView() {
         <div className="overflow-x-auto">
           <table className="w-full border-collapse text-left text-xs">
             <thead>
-              <tr className="border-b border-white/10 text-slate-400 font-bold text-[11px]">
+              <tr className="border-b border-white/10 text-mocha-300 font-bold text-[11px]">
                 <th className="p-3">Rank & Habit</th>
                 <th className="p-3">Type</th>
                 <th className="p-3 text-center">Current Streak</th>
@@ -384,12 +384,12 @@ export function AnalyticsView() {
                       <span
                         className={`w-6 h-6 rounded-full flex items-center justify-center font-black text-xs ${
                           idx === 0
-                            ? 'bg-yellow-500/20 text-yellow-300 border border-yellow-500/40'
+                            ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
                             : idx === 1
-                            ? 'bg-slate-300/20 text-slate-200 border border-slate-300/40'
+                            ? 'bg-mocha-300/20 text-mocha-100 border border-mocha-300/40'
                             : idx === 2
-                            ? 'bg-amber-600/20 text-amber-300 border border-amber-600/40'
-                            : 'bg-white/5 text-slate-500'
+                            ? 'bg-caramel-600/20 text-caramel-300 border border-caramel-600/40'
+                            : 'bg-white/5 text-mocha-400'
                         }`}
                       >
                         {idx + 1}
@@ -397,14 +397,14 @@ export function AnalyticsView() {
                       <span>{task.taskName}</span>
                     </td>
                     <td className="p-3">
-                      <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-white/5 text-slate-300">
+                      <span className="text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-white/5 text-mocha-200">
                         {task.type}
                       </span>
                     </td>
                     <td className="p-3 text-center font-bold text-amber-400">
                       {task.currentStreak}d
                     </td>
-                    <td className="p-3 text-center font-semibold text-yellow-400">
+                    <td className="p-3 text-center font-semibold text-amber-300">
                       {task.bestStreak}d
                     </td>
                     <td className="p-3 text-center">
@@ -412,13 +412,13 @@ export function AnalyticsView() {
                         className={`font-black font-mono px-2 py-0.5 rounded-md ${
                           task.completionRate >= 80
                             ? 'text-emerald-400 bg-emerald-500/15'
-                            : 'text-slate-300 bg-white/5'
+                            : 'text-mocha-200 bg-white/5'
                         }`}
                       >
                         {task.completionRate}%
                       </span>
                     </td>
-                    <td className="p-3 text-right text-slate-300 font-mono">
+                    <td className="p-3 text-right text-mocha-200 font-mono">
                       {task.totalCompletedDays} / {task.totalActiveDaysElapsed}
                     </td>
                   </tr>

@@ -3,45 +3,51 @@
 @tailwind utilities;
 
 :root {
-  --bg-primary: #080c16;
-  --bg-secondary: #0f172a;
-  --bg-card: rgba(15, 23, 42, 0.75);
-  --bg-card-hover: rgba(30, 41, 59, 0.85);
-  --bg-card-active: rgba(30, 41, 59, 0.95);
-  --border-card: rgba(255, 255, 255, 0.08);
-  --border-card-hover: rgba(99, 102, 241, 0.4);
-  --border-card-active: rgba(99, 102, 241, 0.6);
-  --text-primary: #f8fafc;
-  --text-secondary: #94a3b8;
-  --text-muted: #64748b;
-  --accent-primary: #6366f1;
-  --accent-indigo: #6366f1;
-  --accent-emerald: #10b981;
-  --accent-amber: #f59e0b;
-  --accent-rose: #f43f5e;
-  --accent-purple: #a855f7;
-  --accent-cyan: #06b6d4;
+  /* Dark Mode: Smoked Espresso & Rich Mocha Brown Palette */
+  --bg-primary: #120b08;
+  --bg-secondary: #1a110d;
+  --bg-card: rgba(26, 17, 13, 0.82);
+  --bg-card-hover: rgba(41, 27, 21, 0.9);
+  --bg-card-active: rgba(54, 35, 27, 0.95);
+  --border-card: rgba(235, 215, 195, 0.09);
+  --border-card-hover: rgba(217, 138, 76, 0.45);
+  --border-card-active: rgba(217, 138, 76, 0.7);
+  --text-primary: #faf3ec;
+  --text-secondary: #d6c2b2;
+  --text-muted: #968172;
+  --accent-primary: #c87a3e;
+  --accent-caramel: #df8b42;
+  --accent-bronze: #e6a15c;
+  --accent-terracotta: #c45d36;
+  --accent-emerald: #4d935f;
+  --accent-amber: #e59a2f;
+  --accent-rose: #d65353;
+  --accent-purple: #a6637e;
+  --accent-cyan: #4a9e9b;
 }
 
 .light-theme {
-  --bg-primary: #f8fafc;
+  /* Light Mode: Warm Latte & Soft Almond Cream Palette */
+  --bg-primary: #fcf9f5;
   --bg-secondary: #ffffff;
-  --bg-card: rgba(255, 255, 255, 0.92);
-  --bg-card-hover: #f1f5f9;
-  --bg-card-active: #e2e8f0;
-  --border-card: rgba(0, 0, 0, 0.08);
-  --border-card-hover: rgba(99, 102, 241, 0.45);
-  --border-card-active: rgba(99, 102, 241, 0.65);
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
-  --accent-primary: #4f46e5;
-  --accent-indigo: #4f46e5;
-  --accent-emerald: #059669;
-  --accent-amber: #d97706;
-  --accent-rose: #e11d48;
-  --accent-purple: #9333ea;
-  --accent-cyan: #0891b2;
+  --bg-card: rgba(255, 252, 248, 0.95);
+  --bg-card-hover: #f5ebe0;
+  --bg-card-active: #ebdccf;
+  --border-card: rgba(100, 60, 35, 0.1);
+  --border-card-hover: rgba(184, 102, 45, 0.5);
+  --border-card-active: rgba(184, 102, 45, 0.75);
+  --text-primary: #2b1a13;
+  --text-secondary: #6e5142;
+  --text-muted: #9e8576;
+  --accent-primary: #a85823;
+  --accent-caramel: #b86729;
+  --accent-bronze: #c97d3e;
+  --accent-terracotta: #af4822;
+  --accent-emerald: #397d4a;
+  --accent-amber: #c47c17;
+  --accent-rose: #bf3939;
+  --accent-purple: #8f4766;
+  --accent-cyan: #317d7b;
 }
 
 body {
@@ -53,13 +59,13 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-image: 
-    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
-    radial-gradient(at 100% 100%, rgba(168, 85, 247, 0.07) 0px, transparent 50%),
-    radial-gradient(at 50% 50%, rgba(16, 185, 129, 0.03) 0px, transparent 50%);
+    radial-gradient(at 0% 0%, rgba(200, 122, 62, 0.12) 0px, transparent 50%),
+    radial-gradient(at 100% 100%, rgba(223, 139, 66, 0.1) 0px, transparent 50%),
+    radial-gradient(at 50% 50%, rgba(196, 93, 54, 0.05) 0px, transparent 50%);
   background-attachment: fixed;
 }
 
-/* Custom modern scrollbars */
+/* Custom warm brown scrollbars */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -70,12 +76,12 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(148, 163, 184, 0.2);
+  background: rgba(177, 123, 91, 0.25);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(148, 163, 184, 0.4);
+  background: rgba(177, 123, 91, 0.45);
 }
 
 /* Glassmorphism surfaces */
@@ -111,49 +117,61 @@ body {
 .glass-card-interactive:hover {
   transform: translateY(-2px);
   border-color: var(--border-card-hover);
-  box-shadow: 0 14px 30px -10px rgba(0, 0, 0, 0.35), 0 0 20px -5px rgba(99, 102, 241, 0.15);
+  box-shadow: 0 14px 30px -10px rgba(0, 0, 0, 0.4), 0 0 20px -5px rgba(200, 122, 62, 0.25);
 }
 
-/* Vibrant gradients */
+/* Warm Caramel & Mocha Brown Gradients */
 .gradient-primary {
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #ec4899 100%);
+  background: linear-gradient(135deg, #a45a2a 0%, #c97d3e 50%, #e8a760 100%);
 }
 
 .gradient-primary-subtle {
-  background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+  background: linear-gradient(135deg, rgba(164, 90, 42, 0.2) 0%, rgba(232, 167, 96, 0.2) 100%);
+}
+
+.gradient-mocha {
+  background: linear-gradient(135deg, #2b1811 0%, #4a2d20 50%, #6e4331 100%);
+}
+
+.gradient-caramel {
+  background: linear-gradient(135deg, #af5f22 0%, #de8a3b 100%);
+}
+
+.gradient-bronze {
+  background: linear-gradient(135deg, #914822 0%, #c77239 100%);
 }
 
 .gradient-emerald {
-  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  background: linear-gradient(135deg, #3d784c 0%, #5ba56f 100%);
 }
 
 .gradient-amber {
-  background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+  background: linear-gradient(135deg, #b86e18 0%, #e69d35 100%);
 }
 
 .gradient-rose {
-  background: linear-gradient(135deg, #e11d48 0%, #f43f5e 100%);
+  background: linear-gradient(135deg, #b53d3d 0%, #d95d5d 100%);
 }
 
 .gradient-cyan {
-  background: linear-gradient(135deg, #0891b2 0%, #06b6d4 100%);
+  background: linear-gradient(135deg, #327371 0%, #54a3a0 100%);
 }
 
 .gradient-dark {
-  background: linear-gradient(180deg, rgba(30, 41, 59, 0.7) 0%, rgba(15, 23, 42, 0.9) 100%);
+  background: linear-gradient(180deg, rgba(38, 24, 18, 0.85) 0%, rgba(18, 11, 8, 0.95) 100%);
 }
 
-/* Shimmer & glow effects */
+/* Shimmer & Glow effects tailored for Warm Bronze / Amber */
 .glow-primary {
-  box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.4);
+  box-shadow: 0 0 25px -5px rgba(201, 125, 62, 0.45);
 }
 
 .glow-emerald {
-  box-shadow: 0 0 25px -5px rgba(16, 185, 129, 0.35);
+  box-shadow: 0 0 25px -5px rgba(77, 147, 95, 0.35);
 }
 
 .glow-amber {
-  box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.35);
+  box-shadow: 0 0 25px -5px rgba(230, 157, 53, 0.4);
 }
 
 /* Smooth animations */
@@ -192,6 +210,6 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 235, 215, 0.1), transparent);
   animation: shimmer-sweep 2.5s infinite;
 }

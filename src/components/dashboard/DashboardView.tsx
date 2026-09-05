@@ -128,25 +128,25 @@ export function DashboardView({
           {/* Left: Title & Search */}
           <div className="flex items-center gap-3 flex-1">
             <div className="relative flex-1 max-w-sm">
-              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+              <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-mocha-400" />
               <input
                 type="text"
                 placeholder="Search today's habits..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-3.5 py-2 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 text-xs focus:outline-none focus:border-indigo-500 transition"
+                className="w-full pl-9 pr-3.5 py-2 rounded-xl bg-white/5 border border-white/10 text-white placeholder-mocha-500 text-xs focus:outline-none focus:border-caramel-500 transition"
               />
             </div>
 
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
-              className="px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-semibold focus:outline-none focus:border-indigo-500 transition"
+              className="px-3 py-2 rounded-xl bg-espresso-900/90 border border-white/10 text-mocha-100 text-xs font-semibold focus:outline-none focus:border-caramel-500 transition"
             >
-              <option value="ALL" className="bg-slate-900 text-white">All Types</option>
-              <option value="CHECKBOX" className="bg-slate-900 text-white">Checkboxes</option>
-              <option value="NUMERIC" className="bg-slate-900 text-white">Numeric</option>
-              <option value="TIME" className="bg-slate-900 text-white">Time</option>
+              <option value="ALL" className="bg-espresso-950 text-white">All Types</option>
+              <option value="CHECKBOX" className="bg-espresso-950 text-white">Checkboxes</option>
+              <option value="NUMERIC" className="bg-espresso-950 text-white">Numeric</option>
+              <option value="TIME" className="bg-espresso-950 text-white">Time</option>
             </select>
           </div>
 
@@ -159,7 +159,7 @@ export function DashboardView({
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                   filter === 'ALL'
                     ? 'gradient-primary text-white shadow-sm'
-                    : 'text-slate-400 hover:text-white'
+                    : 'text-mocha-400 hover:text-white'
                 }`}
               >
                 All ({activeTasksToday.length})
@@ -169,7 +169,7 @@ export function DashboardView({
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                   filter === 'INCOMPLETE'
                     ? 'bg-rose-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-white'
+                    : 'text-mocha-400 hover:text-white'
                 }`}
               >
                 Pending ({activeTasksToday.length - completedToday.length})
@@ -179,7 +179,7 @@ export function DashboardView({
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
                   filter === 'COMPLETED'
                     ? 'bg-emerald-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-white'
+                    : 'text-mocha-400 hover:text-white'
                 }`}
               >
                 Done ({completedToday.length})
@@ -192,8 +192,8 @@ export function DashboardView({
                 onClick={() => setViewMode('GRID')}
                 className={`p-1.5 rounded-lg transition-all ${
                   viewMode === 'GRID'
-                    ? 'bg-indigo-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-caramel-600 text-white shadow-sm'
+                    : 'text-mocha-400 hover:text-white'
                 }`}
                 title="Grid Card View"
               >
@@ -203,8 +203,8 @@ export function DashboardView({
                 onClick={() => setViewMode('LIST')}
                 className={`p-1.5 rounded-lg transition-all ${
                   viewMode === 'LIST'
-                    ? 'bg-indigo-600 text-white shadow-sm'
-                    : 'text-slate-400 hover:text-white'
+                    ? 'bg-caramel-600 text-white shadow-sm'
+                    : 'text-mocha-400 hover:text-white'
                 }`}
                 title="Compact List View"
               >
@@ -216,8 +216,8 @@ export function DashboardView({
 
         {/* Task Cards Grid or Compact List */}
         {displayTasks.length === 0 ? (
-          <div className="glass-card p-12 text-center text-slate-400 space-y-4 rounded-2xl">
-            <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/25 flex items-center justify-center mx-auto text-indigo-400">
+          <div className="glass-card p-12 text-center text-mocha-300 space-y-4 rounded-2xl">
+            <div className="w-14 h-14 rounded-2xl bg-caramel-500/10 border border-caramel-500/25 flex items-center justify-center mx-auto text-caramel-400">
               <Sparkles className="w-7 h-7 animate-soft-pulse" />
             </div>
             <div className="space-y-1">
@@ -228,7 +228,7 @@ export function DashboardView({
                   ? '🎉 Outstanding! All habits completed for today.'
                   : 'No active habits scheduled for today'}
               </p>
-              <p className="text-xs text-slate-400 max-w-md mx-auto leading-relaxed">
+              <p className="text-xs text-mocha-400 max-w-md mx-auto leading-relaxed">
                 {filter === 'ALL'
                   ? 'Create your first customized goal or adjust frequency settings.'
                   : 'Adjust your search queries or filter criteria to see other tasks.'}
@@ -237,7 +237,7 @@ export function DashboardView({
             {filter === 'ALL' && (
               <button
                 onClick={() => setIsCreateModalOpen(true)}
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl gradient-primary text-white text-xs font-bold shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:opacity-95 transition"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl gradient-primary text-white text-xs font-bold shadow-lg shadow-caramel-500/25 hover:shadow-caramel-500/40 hover:opacity-95 transition"
               >
                 <Plus className="w-4 h-4" />
                 <span>Create New Goal</span>
@@ -286,7 +286,7 @@ export function DashboardView({
                       className={`w-7 h-7 rounded-xl flex items-center justify-center font-bold text-xs transition-all ${
                         isComp
                           ? 'bg-emerald-600 text-white shadow-md shadow-emerald-600/30'
-                          : 'bg-white/5 text-slate-500 border border-white/10 hover:border-white/25'
+                          : 'bg-white/5 text-mocha-400 border border-white/10 hover:border-white/25'
                       }`}
                       title={isComp ? 'Mark Incomplete' : 'Mark Complete'}
                     >
@@ -295,15 +295,15 @@ export function DashboardView({
 
                     <div className="truncate">
                       <div className="flex items-center gap-2">
-                        <span className={`text-xs font-bold ${isComp ? 'line-through text-slate-400' : 'text-white'} truncate`}>
+                        <span className={`text-xs font-bold ${isComp ? 'line-through text-mocha-400' : 'text-white'} truncate`}>
                           {task.name}
                         </span>
-                        <span className="text-[10px] uppercase font-bold px-1.5 py-0.2 rounded bg-white/5 text-slate-400">
+                        <span className="text-[10px] uppercase font-bold px-1.5 py-0.2 rounded bg-white/5 text-mocha-300">
                           {task.type}
                         </span>
                       </div>
                       {task.type !== 'CHECKBOX' && (
-                        <p className="text-[11px] text-slate-400">
+                        <p className="text-[11px] text-mocha-300">
                           {actualVal !== null ? actualVal : 0} / {targetVal} {task.unit || ''} ({progressPct}%)
                         </p>
                       )}
@@ -325,14 +325,14 @@ export function DashboardView({
                         setEditingTask(task);
                         setIsCreateModalOpen(true);
                       }}
-                      className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition"
+                      className="p-1.5 rounded-lg text-mocha-400 hover:text-white hover:bg-white/10 transition"
                       title="Edit Habit"
                     >
                       <Edit2 className="w-3.5 h-3.5" />
                     </button>
                     <button
                       onClick={() => handleDeleteTask(task.id)}
-                      className="p-1.5 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition"
+                      className="p-1.5 rounded-lg text-mocha-400 hover:text-rose-400 hover:bg-rose-500/10 transition"
                       title="Delete Habit"
                     >
                       <Trash2 className="w-3.5 h-3.5" />

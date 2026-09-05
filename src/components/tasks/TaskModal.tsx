@@ -227,10 +227,10 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fade-in overflow-y-auto">
-      <div className="w-full max-w-xl rounded-2xl glass-panel border border-white/15 bg-slate-950/98 p-6 sm:p-7 shadow-2xl relative max-h-[92vh] overflow-y-auto space-y-6">
+      <div className="w-full max-w-xl rounded-2xl glass-panel border border-white/15 bg-espresso-950/98 p-6 sm:p-7 shadow-2xl relative max-h-[92vh] overflow-y-auto space-y-6">
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition"
+          className="absolute top-4 right-4 p-2 rounded-xl text-mocha-300 hover:text-white hover:bg-white/10 transition"
         >
           <X className="w-5 h-5" />
         </button>
@@ -238,10 +238,10 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
         {/* Modal Title */}
         <div className="space-y-1">
           <h2 className="text-xl sm:text-2xl font-black text-white flex items-center gap-2 tracking-tight">
-            <Sparkles className="w-5 h-5 text-indigo-400" />
+            <Sparkles className="w-5 h-5 text-caramel-400" />
             <span>{editingTask ? 'Edit Goal & Habit' : 'Create New Goal / Habit'}</span>
           </h2>
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-mocha-300">
             Set custom duration, targets, frequencies, and scheduled reminders.
           </p>
         </div>
@@ -249,7 +249,7 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
         {/* Quick Start Templates for New Goals */}
         {!editingTask && (
           <div className="space-y-2 p-3.5 rounded-2xl bg-white/5 border border-white/5">
-            <div className="flex items-center gap-1.5 text-xs font-bold text-indigo-300">
+            <div className="flex items-center gap-1.5 text-xs font-bold text-caramel-300">
               <Wand2 className="w-3.5 h-3.5" />
               <span>Quick-Start Popular Templates</span>
             </div>
@@ -259,7 +259,7 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
                   key={tpl.name}
                   type="button"
                   onClick={() => handleApplyTemplate(tpl)}
-                  className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-indigo-600/20 border border-white/10 hover:border-indigo-500/40 text-slate-300 hover:text-indigo-200 text-[11px] font-semibold transition active:scale-95"
+                  className="px-2.5 py-1 rounded-lg bg-white/5 hover:bg-caramel-600/20 border border-white/10 hover:border-caramel-500/40 text-mocha-200 hover:text-caramel-200 text-[11px] font-semibold transition active:scale-95"
                 >
                   + {tpl.name}
                 </button>
@@ -278,7 +278,7 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
           {/* Section 1: Basic Info */}
           <div className="space-y-3">
             <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1">
+              <label className="block text-xs font-bold text-mocha-200 mb-1">
                 Goal / Habit Name *
               </label>
               <input
@@ -287,12 +287,12 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
                 placeholder="e.g. 10,000 Steps, Deep Work, Read 30 Mins"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
-                className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 text-sm transition"
+                className="w-full px-3.5 py-2.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-mocha-400 focus:outline-none focus:border-caramel-500 text-sm transition"
               />
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1">
+              <label className="block text-xs font-bold text-mocha-200 mb-1">
                 Description / Guidelines (Optional)
               </label>
               <textarea
@@ -300,7 +300,7 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
                 placeholder="Why this habit matters, rules, reminders..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="w-full px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 text-xs transition"
+                className="w-full px-3.5 py-2 rounded-xl bg-white/5 border border-white/10 text-white placeholder-mocha-400 focus:outline-none focus:border-caramel-500 text-xs transition"
               />
             </div>
           </div>
@@ -308,7 +308,7 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
           {/* Section 2: Goal Type & Targets */}
           <div className="space-y-3 pt-2 border-t border-white/10">
             <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1.5">
+              <label className="block text-xs font-bold text-mocha-200 mb-1.5">
                 Goal Type *
               </label>
               <div className="grid grid-cols-3 gap-2.5">
@@ -323,12 +323,12 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
                     onClick={() => handleTypeChange(t.id as any)}
                     className={`p-3 rounded-xl border text-left transition-all ${
                       type === t.id
-                        ? 'bg-indigo-600/20 border-indigo-500 text-white shadow-md shadow-indigo-500/20'
-                        : 'bg-white/5 border-white/5 text-slate-400 hover:bg-white/10 hover:text-slate-200'
+                        ? 'bg-caramel-600/20 border-caramel-500 text-white shadow-md shadow-caramel-500/20'
+                        : 'bg-white/5 border-white/5 text-mocha-300 hover:bg-white/10 hover:text-mocha-100'
                     }`}
                   >
                     <p className="text-xs font-bold text-white">{t.label}</p>
-                    <p className="text-[10px] text-slate-400 mt-0.5">{t.desc}</p>
+                    <p className="text-[10px] text-mocha-300 mt-0.5">{t.desc}</p>
                   </button>
                 ))}
               </div>
@@ -338,7 +338,7 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
             {type !== 'CHECKBOX' && (
               <div className="grid grid-cols-2 gap-3 p-3.5 rounded-xl bg-white/5 border border-white/5">
                 <div>
-                  <label className="block text-xs font-bold text-slate-300 mb-1">
+                  <label className="block text-xs font-bold text-mocha-200 mb-1">
                     Daily Target *
                   </label>
                   <input
@@ -349,11 +349,11 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
                     placeholder={type === 'TIME' ? '2' : '10000'}
                     value={target}
                     onChange={(e) => setTarget(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-white/10 text-white text-sm focus:outline-none focus:border-indigo-500"
+                    className="w-full px-3 py-2 rounded-lg bg-espresso-950 border border-white/10 text-white text-sm focus:outline-none focus:border-caramel-500"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-300 mb-1">
+                  <label className="block text-xs font-bold text-mocha-200 mb-1">
                     Measurement Unit
                   </label>
                   <input
@@ -361,7 +361,7 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
                     placeholder={type === 'TIME' ? 'hours' : 'steps'}
                     value={unit}
                     onChange={(e) => setUnit(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-white/10 text-white text-sm focus:outline-none focus:border-indigo-500"
+                    className="w-full px-3 py-2 rounded-lg bg-espresso-950 border border-white/10 text-white text-sm focus:outline-none focus:border-caramel-500"
                   />
                 </div>
               </div>
@@ -372,8 +372,8 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
           <div className="space-y-3 pt-2 border-t border-white/10">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1 flex items-center gap-1">
-                  <Calendar className="w-3.5 h-3.5 text-indigo-400" />
+                <label className="block text-xs font-bold text-mocha-200 mb-1 flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5 text-caramel-400" />
                   <span>Start Date *</span>
                 </label>
                 <input
@@ -381,12 +381,12 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
                   required
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs focus:outline-none focus:border-caramel-500"
                 />
               </div>
               <div>
-                <label className="block text-xs font-bold text-slate-300 mb-1 flex items-center gap-1">
-                  <Calendar className="w-3.5 h-3.5 text-indigo-400" />
+                <label className="block text-xs font-bold text-mocha-200 mb-1 flex items-center gap-1">
+                  <Calendar className="w-3.5 h-3.5 text-caramel-400" />
                   <span>End Date *</span>
                 </label>
                 <input
@@ -394,23 +394,23 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
                   required
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs focus:outline-none focus:border-indigo-500"
+                  className="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs focus:outline-none focus:border-caramel-500"
                 />
               </div>
             </div>
 
             <div>
-              <label className="block text-xs font-bold text-slate-300 mb-1">
+              <label className="block text-xs font-bold text-mocha-200 mb-1">
                 Tracking Frequency
               </label>
               <select
                 value={frequency}
                 onChange={(e) => setFrequency(e.target.value as any)}
-                className="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-bold focus:outline-none focus:border-indigo-500"
+                className="w-full px-3 py-2 rounded-xl bg-white/5 border border-white/10 text-white text-xs font-bold focus:outline-none focus:border-caramel-500"
               >
-                <option value="DAILY" className="bg-slate-900 text-white">Everyday (Daily)</option>
-                <option value="WEEKDAYS" className="bg-slate-900 text-white">Weekdays Only (Mon - Fri)</option>
-                <option value="WEEKENDS" className="bg-slate-900 text-white">Weekends Only (Sat - Sun)</option>
+                <option value="DAILY" className="bg-espresso-950 text-white">Everyday (Daily)</option>
+                <option value="WEEKDAYS" className="bg-espresso-950 text-white">Weekdays Only (Mon - Fri)</option>
+                <option value="WEEKENDS" className="bg-espresso-950 text-white">Weekends Only (Sat - Sun)</option>
               </select>
             </div>
           </div>
@@ -424,7 +424,7 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
                 </div>
                 <div>
                   <span className="text-xs font-bold text-white">Smart Reminders</span>
-                  <p className="text-[10px] text-slate-400">Scheduled in-app notifications</p>
+                  <p className="text-[10px] text-mocha-300">Scheduled in-app notifications</p>
                 </div>
               </div>
               <label className="relative inline-flex items-center cursor-pointer">
@@ -434,14 +434,14 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
                   onChange={(e) => setReminderEnabled(e.target.checked)}
                   className="sr-only peer"
                 />
-                <div className="w-9 h-5 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+                <div className="w-9 h-5 bg-mocha-800 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-caramel-600"></div>
               </label>
             </div>
 
             {reminderEnabled && (
               <div className="space-y-3 pt-3 border-t border-white/10 animate-fade-in">
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-400 mb-1.5">
+                  <label className="block text-[11px] font-bold text-mocha-300 mb-1.5">
                     Scheduled Daily Times
                   </label>
                   <div className="flex flex-wrap gap-1.5 mb-2">
@@ -467,7 +467,7 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
                       type="time"
                       value={newTimeInput}
                       onChange={(e) => setNewTimeInput(e.target.value)}
-                      className="px-3 py-1.5 rounded-lg bg-slate-900 border border-white/10 text-white text-xs font-mono"
+                      className="px-3 py-1.5 rounded-lg bg-espresso-950 border border-white/10 text-white text-xs font-mono"
                     />
                     <button
                       type="button"
@@ -481,7 +481,7 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
                 </div>
 
                 <div>
-                  <label className="block text-[11px] font-bold text-slate-400 mb-1">
+                  <label className="block text-[11px] font-bold text-mocha-300 mb-1">
                     Custom Notification Message
                   </label>
                   <input
@@ -489,7 +489,7 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
                     placeholder={`e.g. Time to complete: ${name || 'habit'}!`}
                     value={reminderMessage}
                     onChange={(e) => setReminderMessage(e.target.value)}
-                    className="w-full px-3 py-2 rounded-lg bg-slate-900 border border-white/10 text-white text-xs focus:outline-none focus:border-indigo-500"
+                    className="w-full px-3 py-2 rounded-lg bg-espresso-950 border border-white/10 text-white text-xs focus:outline-none focus:border-caramel-500"
                   />
                 </div>
               </div>
@@ -501,14 +501,14 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2 rounded-xl text-xs font-semibold text-slate-400 hover:text-white transition"
+              className="px-4 py-2 rounded-xl text-xs font-semibold text-mocha-300 hover:text-white transition"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-2.5 rounded-xl gradient-primary text-white text-xs font-black shadow-lg shadow-indigo-500/25 hover:opacity-95 active:scale-95 transition disabled:opacity-50"
+              className="px-6 py-2.5 rounded-xl gradient-primary text-white text-xs font-black shadow-lg shadow-caramel-600/25 hover:opacity-95 active:scale-95 transition disabled:opacity-50"
             >
               {loading ? 'Saving Goal...' : editingTask ? 'Update Habit' : 'Create Habit'}
             </button>
@@ -516,5 +516,6 @@ export function TaskModal({ isOpen, onClose, onSaved, editingTask }: TaskModalPr
         </form>
       </div>
     </div>
+
   );
 }

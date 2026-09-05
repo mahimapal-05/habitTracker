@@ -58,11 +58,11 @@ export function GreetingBanner({
               {greeting}
             </h2>
           </div>
-          <p className="text-xs sm:text-sm text-slate-400 flex items-center gap-1.5 font-medium">
-            <Calendar className="w-3.5 h-3.5 text-indigo-400" />
+          <p className="text-xs sm:text-sm text-mocha-300 flex items-center gap-1.5 font-medium">
+            <Calendar className="w-3.5 h-3.5 text-caramel-400" />
             <span>{formatDisplayDate(todayStr)}</span>
-            <span className="text-slate-600">•</span>
-            <span className="text-indigo-300 font-semibold">
+            <span className="text-mocha-500">•</span>
+            <span className="text-caramel-300 font-semibold">
               {totalActiveCount} active habits scheduled today
             </span>
           </p>
@@ -70,7 +70,7 @@ export function GreetingBanner({
 
         {highestStreak > 0 && (
           <div className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-2xl bg-amber-500/10 border border-amber-500/25 text-amber-300 text-xs font-bold shadow-sm">
-            <Trophy className="w-4 h-4 text-yellow-400" />
+            <Trophy className="w-4 h-4 text-amber-400" />
             <span>Top Streak: {highestStreak} Days</span>
           </div>
         )}
@@ -84,12 +84,12 @@ export function GreetingBanner({
             : motivation.accent === 'amber'
             ? 'border-amber-500/30 bg-amber-950/25 text-amber-300 glow-amber'
             : motivation.accent === 'purple'
-            ? 'border-purple-500/30 bg-purple-950/25 text-purple-300'
-            : 'border-indigo-500/30 bg-indigo-950/25 text-indigo-300 glow-primary'
+            ? 'border-caramel-600/30 bg-espresso-900/30 text-caramel-200'
+            : 'border-caramel-500/30 bg-mocha-950/40 text-caramel-300 glow-primary'
         }`}
       >
         {/* Ambient background glow */}
-        <div className="absolute top-0 right-0 w-64 h-32 bg-white/5 blur-3xl pointer-events-none rounded-full" />
+        <div className="absolute top-0 right-0 w-64 h-32 bg-caramel-500/10 blur-3xl pointer-events-none rounded-full" />
 
         <div className="flex items-start gap-4 z-10">
           <div
@@ -98,7 +98,7 @@ export function GreetingBanner({
                 ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30'
                 : motivation.accent === 'amber'
                 ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
-                : 'bg-indigo-500/20 text-indigo-400 border border-indigo-500/30'
+                : 'bg-caramel-500/20 text-caramel-300 border border-caramel-500/30'
             }`}
           >
             <Sparkles className="w-5 h-5 animate-soft-pulse" />
@@ -109,11 +109,11 @@ export function GreetingBanner({
               <span className="text-sm font-bold text-white tracking-tight">
                 {motivation.title}
               </span>
-              <span className="text-[10px] uppercase font-black tracking-wider px-2 py-0.5 rounded-full bg-white/10 text-slate-200 border border-white/10">
+              <span className="text-[10px] uppercase font-black tracking-wider px-2 py-0.5 rounded-full bg-white/10 text-mocha-200 border border-white/10">
                 {motivation.tag}
               </span>
             </div>
-            <p className="text-xs sm:text-sm text-slate-300 leading-relaxed max-w-3xl">
+            <p className="text-xs sm:text-sm text-mocha-200 leading-relaxed max-w-3xl">
               {motivation.message}
             </p>
           </div>
@@ -121,7 +121,7 @@ export function GreetingBanner({
 
         {/* Today's Quick Progress Meter */}
         <div className="w-full md:w-auto flex md:flex-col items-center md:items-end justify-between gap-2 shrink-0 pt-3 md:pt-0 border-t md:border-t-0 border-white/10 z-10">
-          <div className="flex items-center gap-1.5 text-xs font-semibold text-slate-300">
+          <div className="flex items-center gap-1.5 text-xs font-semibold text-mocha-200">
             <Zap className="w-3.5 h-3.5 text-amber-400" />
             <span>Today's Completion</span>
           </div>
@@ -136,6 +136,7 @@ export function GreetingBanner({
           </div>
         </div>
       </div>
+
     </div>
   );
 }

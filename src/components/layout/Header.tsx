@@ -68,14 +68,14 @@ export function Header({ title, subtitle, onOpenCreateTask, onRecordUpdated }: H
   };
 
   return (
-    <header className="flex items-center justify-between py-4 px-4 sm:px-8 border-b border-white/10 bg-slate-950/70 backdrop-blur-xl sticky top-0 z-30 transition-all">
+    <header className="flex items-center justify-between py-4 px-4 sm:px-8 border-b border-white/10 bg-espresso-950/80 backdrop-blur-xl sticky top-0 z-30 transition-all">
       {/* Title & Subtitle */}
       <div className="space-y-0.5">
         <div className="flex items-center gap-2.5">
           <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white">{title}</h1>
         </div>
         {subtitle && (
-          <p className="text-xs text-slate-400 font-medium line-clamp-1">{subtitle}</p>
+          <p className="text-xs text-mocha-300 font-medium line-clamp-1">{subtitle}</p>
         )}
       </div>
 
@@ -84,7 +84,7 @@ export function Header({ title, subtitle, onOpenCreateTask, onRecordUpdated }: H
         {onOpenCreateTask && (
           <button
             onClick={onOpenCreateTask}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl gradient-primary text-white text-xs font-bold shadow-md shadow-indigo-500/20 hover:shadow-indigo-500/35 hover:opacity-95 transition-all duration-200 active:scale-95"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl gradient-primary text-white text-xs font-bold shadow-md shadow-caramel-600/20 hover:shadow-caramel-600/35 hover:opacity-95 transition-all duration-200 active:scale-95"
           >
             <Plus className="w-4 h-4" />
             <span className="hidden sm:inline">New Goal</span>
@@ -100,8 +100,8 @@ export function Header({ title, subtitle, onOpenCreateTask, onRecordUpdated }: H
             }}
             className={`relative p-2.5 rounded-xl border transition-all duration-200 ${
               showBellMenu || reminders.length > 0
-                ? 'bg-indigo-600/15 border-indigo-500/40 text-indigo-300 shadow-sm'
-                : 'bg-white/5 border-white/10 text-slate-400 hover:text-white hover:bg-white/10'
+                ? 'bg-caramel-500/20 border-caramel-500/40 text-caramel-300 shadow-sm'
+                : 'bg-white/5 border-white/10 text-mocha-300 hover:text-white hover:bg-white/10'
             }`}
             title="Reminders & Notifications"
           >
@@ -115,7 +115,7 @@ export function Header({ title, subtitle, onOpenCreateTask, onRecordUpdated }: H
 
           {/* Reminders Dropdown Menu */}
           {showBellMenu && (
-            <div className="absolute right-0 mt-3 w-80 sm:w-96 rounded-2xl glass-panel p-4 shadow-2xl z-50 border border-white/15 bg-slate-900/98 backdrop-blur-2xl">
+            <div className="absolute right-0 mt-3 w-80 sm:w-96 rounded-2xl glass-panel p-4 shadow-2xl z-50 border border-white/15 bg-espresso-950/98 backdrop-blur-2xl">
               <div className="flex items-center justify-between pb-3 border-b border-white/10">
                 <div className="flex items-center gap-2">
                   <div className="p-1.5 rounded-lg bg-amber-500/20 text-amber-400 border border-amber-500/30">
@@ -123,10 +123,10 @@ export function Header({ title, subtitle, onOpenCreateTask, onRecordUpdated }: H
                   </div>
                   <div>
                     <h3 className="text-xs font-bold text-white">Daily Reminders</h3>
-                    <p className="text-[10px] text-slate-400">Scheduled notifications for today</p>
+                    <p className="text-[10px] text-mocha-300">Scheduled notifications for today</p>
                   </div>
                 </div>
-                <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-white/10 text-slate-300">
+                <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-white/10 text-mocha-200">
                   {reminders.length} pending
                 </span>
               </div>
@@ -139,7 +139,7 @@ export function Header({ title, subtitle, onOpenCreateTask, onRecordUpdated }: H
                     </div>
                     <div>
                       <p className="text-xs font-bold text-white">All Caught Up!</p>
-                      <p className="text-[11px] text-slate-400 mt-0.5">
+                      <p className="text-[11px] text-mocha-300 mt-0.5">
                         No pending reminders for today. Great job staying on top!
                       </p>
                     </div>
@@ -160,7 +160,7 @@ export function Header({ title, subtitle, onOpenCreateTask, onRecordUpdated }: H
                           </span>
                         </div>
                         {rem.message && (
-                          <p className="text-[11px] text-slate-400 line-clamp-1">{rem.message}</p>
+                          <p className="text-[11px] text-mocha-300 line-clamp-1">{rem.message}</p>
                         )}
                       </div>
 
@@ -182,11 +182,12 @@ export function Header({ title, subtitle, onOpenCreateTask, onRecordUpdated }: H
 
         {/* User initials chip on mobile */}
         {user && (
-          <div className="md:hidden w-8 h-8 rounded-xl bg-indigo-600/30 border border-indigo-400/30 flex items-center justify-center text-indigo-300 font-bold text-xs">
+          <div className="md:hidden w-8 h-8 rounded-xl bg-caramel-600/30 border border-caramel-400/30 flex items-center justify-center text-caramel-300 font-bold text-xs">
             {user.name.charAt(0).toUpperCase()}
           </div>
         )}
       </div>
     </header>
+
   );
 }

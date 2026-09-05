@@ -23,7 +23,7 @@ export function AppLayout({ children, title, subtitle, onRefreshData }: AppLayou
   };
 
   return (
-    <div className="flex min-h-screen bg-slate-950 text-slate-100 selection:bg-indigo-500 selection:text-white antialiased">
+    <div className="flex min-h-screen bg-espresso-950 text-mocha-50 selection:bg-caramel-500 selection:text-white antialiased">
       {/* Desktop Sidebar */}
       <Sidebar onOpenCreateTask={() => setIsCreateModalOpen(true)} />
 

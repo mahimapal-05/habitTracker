@@ -23,7 +23,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={plusJakarta.variable} suppressHydrationWarning>
-      <body className={`font-sans antialiased selection:bg-indigo-500 selection:text-white`}>
+      <body className={`font-sans antialiased selection:bg-caramel-500 selection:text-white`}>
         <ThemeProvider>
           <AuthProvider>{children}</AuthProvider>
         </ThemeProvider>
